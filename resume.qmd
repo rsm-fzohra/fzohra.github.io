@@ -1,0 +1,8 @@
+---
+title: "FatmaZ Resume"
+---
+
+
+{{< pdf files/Fatma_Zohra.pdf width=100% height=800 >}}
+
+About this site

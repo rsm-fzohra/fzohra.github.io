@@ -1,0 +1,20 @@
+---
+title: "FatmaZ website"
+image: "files/profile_pic.jpg"
+
+about:
+    template: jolla
+    links: 
+      - icon: envelope
+        href: mailto:fzohra@ucsd.edu
+      - icon: linkedin
+        href: https://www.linkedin.com/in/fatma-zohra-faz/
+
+---
+Welcome to my website 
+
+I am a quantitative marketing research scientist :)
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
