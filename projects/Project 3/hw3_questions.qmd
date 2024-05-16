@@ -1,0 +1,493 @@
+---
+title: "Multinomial Logit Examples"
+author: "Fatma Zohra"
+date: today
+---
+
+
+This assignment uses uses the MNL model to analyze (1) yogurt purchase data made by consumers at a retail location, and (2) conjoint data about consumer preferences for minivans.
+
+
+## 1. Estimating Yogurt Preferences
+
+### Likelihood for the Multi-nomial Logit (MNL) Model
+
+Suppose we have $i=1,\ldots,n$ consumers who each select exactly one product $j$ from a set of $J$ products. The outcome variable is the identity of the product chosen $y_i \in \{1, \ldots, J\}$ or equivalently a vector of $J-1$ zeros and $1$ one, where the $1$ indicates the selected product. For example, if the third product was chosen out of 4 products, then either $y=3$ or $y=(0,0,1,0)$ depending on how we want to represent it. Suppose also that we have a vector of data on each product $x_j$ (eg, size, price, etc.). 
+
+We model the consumer's decision as the selection of the product that provides the most utility, and we'll specify the utility function as a linear function of the product characteristics:
+
+$$ U_{ij} = x_j'\beta + \epsilon_{ij} $$
+
+where $\epsilon_{ij}$ is an i.i.d. extreme value error term. 
+
+The choice of the i.i.d. extreme value error term leads to a closed-form expression for the probability that consumer $i$ chooses product $j$:
+
+$$ \mathbb{P}_i(j) = \frac{e^{x_j'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} $$
+
+For example, if there are 4 products, the probability that consumer $i$ chooses product 3 is:
+
+$$ \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{e^{x_1'\beta} + e^{x_2'\beta} + e^{x_3'\beta} + e^{x_4'\beta}} $$
+
+A clever way to write the individual likelihood function for consumer $i$ is the product of the $J$ probabilities, each raised to the power of an indicator variable ($\delta_{ij}$) that indicates the chosen product:
+
+$$ L_i(\beta) = \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} = \mathbb{P}_i(1)^{\delta_{i1}} \times \ldots \times \mathbb{P}_i(J)^{\delta_{iJ}}$$
+
+Notice that if the consumer selected product $j=3$, then $\delta_{i3}=1$ while $\delta_{i1}=\delta_{i2}=\delta_{i4}=0$ and the likelihood is:
+
+$$ L_i(\beta) = \mathbb{P}_i(1)^0 \times \mathbb{P}_i(2)^0 \times \mathbb{P}_i(3)^1 \times \mathbb{P}_i(4)^0 = \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} $$
+
+The joint likelihood (across all consumers) is the product of the $n$ individual likelihoods:
+
+$$ L_n(\beta) = \prod_{i=1}^n L_i(\beta) = \prod_{i=1}^n \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} $$
+
+And the joint log-likelihood function is:
+
+$$ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) $$
+
+
+### Yogurt Dataset
+
+
+```{python}
+import pandas as pd
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+
+yogurt = pd.read_csv('/home/jovyan/Desktop/MGTA495-2/projects/Project 3/yogurt_data.csv')
+yogurt.head()
+```
+
+```{python}
+yogurt.shape
+
+```
+
+```{python}
+yogurt[['y1','y2','y3','y4']].sum(axis = 0)
+
+```
+
+```{python}
+yogurt.describe()
+```
+
+## Dataset Overview:
+The dataset consists of several columns that capture various aspects of the yogurt purchasing decision. 
+1- ID: A unique identifier for each customer
+2- y1,y2,y3,y4: Binary indicators representing whether a customer preferred a particulat yogurt brand, 1 being preferred and 0 being not preferred
+3- f1,f2,f3,f4: Binary indicators showing whether each yogurt was featrued in a promotional display
+4- p1,p2,p3,p4: Prices of the respective yogurt brabds at the time of purchase
+
+## Analysis Goals
+Using the MNL Model, we aim to achieve the following:
+1- ```Estimate Customer Preferences```: Determine which yogurt brand is most preferred based on estimated coefficients. 
+2- ```Price Senstivity Analysis```: Understand how changes in prices influence consumer choices. 
+3- ```Market Share Simulation```: Simulate market share changes under different pricing scenarios. 
+
+
+Let the vector of product features include brand dummy variables for yogurts 1-3 (we'll omit a dummy for product 4 to avoid multi-collinearity), a dummy variable to indicate if a yogurt was featured, and a continuous variable for the yogurts' prices:  
+
+$$ x_j' = [\mathbbm{1}(\text{Yogurt 1}), \mathbbm{1}(\text{Yogurt 2}), \mathbbm{1}(\text{Yogurt 3}), X_f, X_p] $$
+
+$k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). 
+
+What we would like to do is reorganize the data from a "wide" shape with $n$ rows and multiple columns for each covariate, to a "long" shape with $n \times J$ rows and a single column for each covariate.  As part of this re-organization, we'll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be "pivoted" or "melted" from wide to long.  
+
+Reshape and prep the data: The "hard part" of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer $i$, covariate) 
+
+```{python}
+yogurt_long = pd.wide_to_long(yogurt, stubnames=['y','f', 'p'], i=['id'], j='product').reset_index()
+
+# Add product brand dummies
+yogurt_long['yogurt1'] = (yogurt_long['product'] == 1).astype(int)
+yogurt_long['yogurt2'] = (yogurt_long['product'] == 2).astype(int)
+yogurt_long['yogurt3'] = (yogurt_long['product'] == 3).astype(int)
+
+
+# Rename columns and drop unnecessary ones
+yogurt_long.rename(columns={'f': 'featured', 'p': 'price'}, inplace=True)
+
+# Display the DataFrame
+yogurt_features= yogurt_long[['yogurt1','yogurt2','yogurt3','featured','price']]
+yogurt_long
+
+```
+### Estimation
+
+```{python}
+yogurt_labels = np.reshape(yogurt[['y1','y2','y3','y4']],(-1, ))
+yogurt_labels.shape 
+
+yogurt_id = yogurt['id'].repeat(4).reset_index(drop = True)
+
+
+```
+```The log-likelihood function```
+
+```{python}
+def multi_ll(beta, y, x, ids):
+    
+    x= x.to_numpy()
+    prob = np.exp(x.dot(beta))
+    df = pd.DataFrame({'prob':prob,'ids':ids})
+    #sum = df.groupby('ids')['prob'].sum().repeat(4).reset_index(drop= True)
+    sum_prob = df.groupby('ids')['prob'].transform('sum')
+    probs = prob/sum_prob
+    return -np.log(probs).sum()
+
+```
+
+```{python}
+beta = np.ones(5)*0
+y= yogurt_labels
+x= yogurt_features
+i= yogurt_id
+x= x.to_numpy()
+prob = np.exp(x.dot(beta))
+df = pd.DataFrame({'prob':prob,'ids':i})
+sum = df.groupby('ids')['prob'].transform('sum')
+probs = prob/sum 
+-np.log(probs).sum()
+
+
+````
+
+
+
+```{python}
+yogurt_features.shape
+yogurt_labels.shape
+
+```
+
+Finding the MLEs for the 5 parameters ($\beta_1, \beta_2, \beta_3, \beta_f, \beta_p$). 
+
+```{python}
+
+beta_initial = np.ones(5) * 0.1  
+result = sp.optimize.minimize(multi_ll, beta_initial, (yogurt_labels, yogurt_features, yogurt_id), method='L-BFGS-B', options={'gtol': 1e-5, 'maxiter': 50})
+
+```
+
+### Discussion
+
+Looking at the intercepts (0.09970444, 0.10002663 and -0.0056015) we can infer that yogurt 2 was the most preferred and yogurt 3 is the least preferred. 
+
+Taking the diffnce between the beta of the most preferred and the least preferred ygurt we can estimate the price difference consumers are willing to pay for their preferred brand. 
+As long as the most preferred yogurt was 12.75 cents/oz more expensive than the least preferred yogurt, consumers are willing to make that extra spend to go after thier preferred brand.  
+
+```{python}
+intercepts = result.x[:3]  
+most_preferred = np.argmax(intercepts)
+least_preferred = np.argmin(intercepts)
+
+print("Intercepts for Yogurt 1, 2, and 3:", intercepts)
+print("Most preferred yogurt is:", most_preferred + 1)
+print("Least preferred yogurt is:", least_preferred + 1)
+
+```
+```{python}
+#(0.10002663 +0.0056015) /0.00828118
+
+price_coefficient = result.x[-1] 
+dollar_benefit = (intercepts[most_preferred] - intercepts[least_preferred]) * -price_coefficient
+
+print("Dollar benefit between the most and least preferred yogurt:", dollar_benefit)
+
+
+
+
+```
+
+
+One benefit of the MNL model is that we can simulate counterfactuals (eg, what if the price of yogurt 1 was $0.10/oz instead of $0.08/oz).
+
+### Market Share Analysis of Yogurt Brands
+In our analysis of consumer prefrences for yogurt brands, we utilized the Multinomial Logit (MNL) model to estimate the current market shares and simulate the impact of a price change on consumer choices. Following results were obtained: 
+The estimated market shares indicated that 100% of the market share was attibuted to Yogurt 1:
+- Yogurt 1: 100%
+- Yogurt 2: 0%
+- Yogurt 3: 0%
+- Yogurt 4: 0%
+```Impact of Price Increase on Yogurt 1```
+To understand the sensitivity of consumer choices to price changes, we simulated a scenario where the price of Yogurt 1 was increased by $0.10 per unit. The new market shares after this price increase remained unchanged:
+
+Yogurt 1: 100%
+Yogurt 2: 0%
+Yogurt 3: 0%
+Yogurt 4: 0%
+Key Insights
+Uniform Preference: The current results indicate a uniform preference for Yogurt 1 among all consumers in the dataset. This outcome suggests that either all consumers chose Yogurt 1 or there is a potential issue with the dataset or model. Based on the intercept calculation however, yogurt 2 was the most preferred choice of consumer which further underscores an issue either in the data set or the analysis model. 
+
+Price Insensitivity: Despite increasing the price of Yogurt 1 by $0.10, the market share for Yogurt 1 did not decrease. This implies that, within the context of the data and model, consumers are not sensitive to this price change.
+
+Further Investigation Needed: The results are surprising and may indicate an underlying issue with the data or model. It is important to verify the dataset to ensure it accurately represents a diverse set of consumer preferences and to reassess the MNL model implementation to confirm it is correctly specified.
+
+Conclusion
+Our initial and revised analyses using the Multinomial Logit model both yielded unexpected results, with 100% of market share attributed to Yogurt 1 regardless of a price increase. This highlights the importance of data and model validation in ensuring accurate and meaningful insights. By addressing these potential issues, we can better understand consumer preferences and market dynamics, ultimately guiding more effective pricing and promotional strategies.
+
+
+```{python}
+
+def calculate_market_shares(beta, features):
+    utilities = np.dot(features, beta)
+    exp_utilities = np.exp(utilities)
+       
+    if exp_utilities.ndim == 1:
+        exp_utilities = exp_utilities.reshape(-1, 1)
+    
+    shares = exp_utilities / np.sum(exp_utilities, axis=1, keepdims=True)
+    return shares.mean(axis=0)
+
+# Current market shares
+current_shares = calculate_market_shares(result.x, yogurt_features)
+print("Current market shares:", current_shares)
+
+# Simulate price increase for yogurt1
+yogurt_features_adjusted = yogurt_features.copy()
+yogurt_features_adjusted.loc[yogurt_features_adjusted['yogurt1'] == 1, 'price'] += 0.10
+
+# New market shares after price increase
+new_shares = calculate_market_shares(result.x, yogurt_features_adjusted)
+print("New market shares after price increase to yogurt 1:", new_shares)
+
+# Check if the market shares for yogurt 1 decrease
+print("Do the yogurt 1 market shares decrease?", "Yes" if new_shares[0] < current_shares[0] else "No")
+
+```
+
+```{python}
+print("Shape of beta:", beta.shape)
+print("Shape of yogurt_features:", yogurt_features.shape)
+
+```
+
+ 
+
+
+## 2. Estimating Minivan Preferences
+
+
+### Data
+
+
+Basic Information about the data: 
+The survey contains 9000 rows, with 9 columns. 
+Price ranges from 30,000 to 40,000 with a mean of 35,003.89. 
+Seats are in the configuration of 6,7 and 8 with a mean of 7. 
+About 33.33% of the alternatives have been chosen, indicating that the data includes one choice per three alternatives. 
+Uniqueness in Data: 
+- Number of respondents: 200
+- Number of choice tasks: 15 by each respondent 
+- Number of alternatives: 3 alternatives per task
+
+```{python}
+data = pd.read_csv("/home/jovyan/Desktop/MGTA495-2/projects/Project 3/rintro-chapter13conjoint.csv")
+```
+
+```{python}
+data.head()
+
+```
+
+```{python}
+data['resp.id'].nunique()
+
+
+```
+
+```{python}
+data['ques'].nunique()
+
+
+```
+
+```{python}
+data['alt'].nunique()
+
+
+```
+
+```{python}
+data.shape
+
+
+```
+
+The attributes (levels) were number of seats (6,7,8), cargo space (2ft, 3ft), engine type (gas, hybrid, electric), and price (in thousands of dollars).
+
+### Model
+
+
+```{python}
+from patsy import dmatrices
+import statsmodels.api as sm
+
+formula = 'choice ~ C(seat, Treatment(6)) + C(cargo, Treatment("2ft")) + C(eng, Treatment("gas")) + price'
+
+y, X = dmatrices(formula, data, return_type='dataframe')
+
+# Fit the MNL model
+mnl_model = sm.MNLogit(y, X)
+mnl_result = mnl_model.fit()
+
+mnl_result.summary()
+
+
+
+
+```
+
+
+### Results
+
+```Coefficients Interpretation```
+Intercept:
+ The large positive intercept (5.5322) suggests a strong baseline propensity towards choosing an alternative when all variables are at their reference levels (6 seats, 2ft cargo, gas engine, and a base price).
+
+Seats:
+
+7 seats (C(seat, Treatment(6))[T.7]): The negative coefficient (-0.5248) indicates that, holding other factors constant, consumers are less likely to choose minivans with 7 seats compared to 6 seats.
+8 seats (C(seat, Treatment(6))[T.8]): Similarly, the negative coefficient (-0.2931) suggests that minivans with 8 seats are also less preferred than those with 6 seats, though the effect is smaller than for 7 seats.
+
+Cargo:
+3ft (C(cargo, Treatment("2ft"))[T.3ft]): The positive coefficient (0.4385) indicates a preference for 3ft of cargo space over 2ft, suggesting that consumers value larger cargo space.
+
+Engine Type:
+Electric (C(eng, Treatment("gas"))[T.elec]): The negative coefficient (-1.4347) strongly indicates that electric engines are less preferred compared to gas engines.
+Hybrid (C(eng, Treatment("gas"))[T.hyb]): The negative coefficient (-0.7605) shows that hybrids are also less preferred than gas engines, but the disfavor is less pronounced compared to electric engines.
+
+Price:
+The negative coefficient (-0.1591) for price confirms the expected behavior: as price increases, the likelihood of choosing that minivan decreases.
+
+Statistical Significance
+All predictors are statistically significant (p-values < 0.000), indicating strong evidence against the null hypothesis for each coefficient.
+
+Standard Errors
+The standard errors provide an estimate of the standard deviation of the coefficients' sampling distribution. Smaller values indicate more precise estimates. For instance, the relatively low standard errors for the engine type coefficients (0.062 and 0.057) suggest that these estimates are precise.
+
+Model Fit and Metrics
+Pseudo R-squared (0.1223): This value suggests that the model explains about 12.23% of the variance in choice relative to a model without predictors. This isn't particularly high, but it's not unusual in choice modeling where many unobserved factors can influence decisions.
+Log-Likelihood and LL-Null: The difference in log-likelihood between the model and the null model (LL-Null) indicates that the predictors significantly improve the fit of the model.
+
+Summary
+The model suggests that consumers prefer:
+6 seats over 7 or 8 seats.
+More cargo space (3ft over 2ft).
+Gas engines over electric or hybrid engines.
+Lower prices.
+
+
+Consumers are willing to pay $2750 for an foot of space from 2 ft cargo to 3 ft cargo 
+
+```{python}
+# Extract the price coefficient
+price_coef = mnl_result.params.loc['price'][0]
+
+# Extract the coefficient for cargo space (3ft vs 2ft)
+cargo_coef = mnl_result.params.loc['C(cargo, Treatment("2ft"))[T.3ft]'][0]
+
+# Calculate the dollar value of 3ft of cargo space compared to 2ft
+dollar_value_cargo = cargo_coef / abs(price_coef)
+dollar_value_cargo
+
+
+```
+
+_todo: assume the market consists of the following 6 minivans. Predict the market shares of each minivan in the market._
+
+| Minivan | Seats | Cargo | Engine | Price |
+|---------|-------|-------|--------|-------|
+| A       | 7     | 2     | Hyb    | 30    |
+| B       | 6     | 2     | Gas    | 30    |
+| C       | 8     | 2     | Gas    | 30    |
+| D       | 7     | 3     | Gas    | 40    |
+| E       | 6     | 2     | Elec   | 40    |
+| F       | 7     | 2     | Hyb    | 35    |
+
+
+```{python}
+
+coefficients = {
+    'Intercept': 5.5322,
+    'C(seat, Treatment(6))[T.7]': -0.5248,
+    'C(seat, Treatment(6))[T.8]': -0.2931,
+    'C(cargo, Treatment("2ft"))[T.3ft]': 0.4385,
+    'C(eng, Treatment("gas"))[T.elec]': -1.4347,
+    'C(eng, Treatment("gas"))[T.hyb]': -0.7605,
+    'price': -0.1591
+}
+
+new_data = pd.DataFrame({
+    "seat": [7, 6, 8, 7, 6, 7],
+    "cargo": ['2ft', '2ft', '2ft', '3ft', '2ft', '2ft'],
+    "eng": ['Hyb', 'Gas', 'Gas', 'Gas', 'Elec', 'Hyb'],
+    "price": [30, 30, 30, 40, 40, 35]
+})
+
+# Calculate utility for each minivan
+def calculate_utility(row):
+    utility = coefficients['Intercept']
+    utility += coefficients['C(seat, Treatment(6))[T.7]'] * (row['seat'] == 7)
+    utility += coefficients['C(seat, Treatment(6))[T.8]'] * (row['seat'] == 8)
+    utility += coefficients['C(cargo, Treatment("2ft"))[T.3ft]'] * (row['cargo'] == '3ft')
+    utility += coefficients['C(eng, Treatment("gas"))[T.elec]'] * (row['eng'] == 'Elec')
+    utility += coefficients['C(eng, Treatment("gas"))[T.hyb]'] * (row['eng'] == 'Hyb')
+    utility += coefficients['price'] * row['price']
+    return utility
+
+new_data['utility'] = new_data.apply(calculate_utility, axis=1)
+
+# Compute probabilities using softmax
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
+new_data['probability'] = softmax(new_data['utility'])
+
+print(new_data[['probability']])
+
+```
+
+Market Share for each of the sox minivans
+
+Minivan A: 11.61%
+Minivan B: 41.97%
+Minivan C: 31.31%
+Minivan D: 7.84%
+Minivan E: 2.04%
+Minivan F: 5.24%
+
+
+Interpretation of Probabilities
+
+Minivan A (0.116071): This model, with 7 seats, 2ft of cargo space, a hybrid engine, and a price of $30,000, has a predicted market share of about 11.6%. This suggests it's a moderately appealing option, likely benefiting from its hybrid engine and lower price.
+
+Minivan B (0.419684): This minivan, which features 6 seats, 2ft of cargo space, a gasoline engine, and a price of $30,000, has the highest predicted market share at approximately 41.97%. Its appeal is likely due to having the baseline level for seats (6) and engine type (gas), combined with a lower price, aligning well with consumer preferences.
+
+Minivan C (0.313062): With 8 seats, 2ft of cargo, a gasoline engine, and also priced at $30,000, this model has a substantial market share of about 31.31%. Its higher number of seats might appeal to those needing more seating capacity, despite the generally lower preference for more than 6 seats.
+
+Minivan D (0.078430): This minivan offers 7 seats, 3ft of cargo space, a gasoline engine, and is priced at $40,000, which results in a lower predicted market share of approximately 7.84%. The higher price and possibly less preferred seating configuration contribute to its lower attractiveness.
+
+Minivan E (0.020365): Featuring 6 seats, 2ft of cargo, an electric engine, and a higher price of $40,000, this model has the lowest market share at about 2.04%. The electric engine and higher price significantly reduce its appeal, as reflected in the model coefficients.
+
+Minivan F (0.052389): This minivan, similar to A but priced at $35,000, sees a reduced market share of about 5.24%. The increase in price compared to Minivan A likely accounts for its reduced attractiveness despite similar other features.
+
+### Overall Insights
+Price Sensitivity: 
+There's a clear sensitivity to price changes, with cheaper models generally having higher market shares.
+Preference for Gas Engines: 
+Models with gas engines are more preferred over hybrid or electric, especially at the same price points.
+Impact of Seat Configuration: 
+While baseline seat configurations (6 seats) tend to be more popular, there's notable interest in models with more seats (8), provided the price remains competitive.
+Cargo Space: 
+The effect of cargo space isn't clearly dominant in these predictions, as only Minivan D offered more cargo space but at a higher price, affecting its overall appeal.
+
+
+
+
+
+
+
+
