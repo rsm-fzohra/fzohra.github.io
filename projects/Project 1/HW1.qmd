@@ -10,8 +10,6 @@ callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 
 Dean Karlan at Yale and John List at the University of Chicago conducted a field experiment to test the effectiveness of different fundraising letters. They sent out 50,000 fundraising letters to potential donors, randomly assigning each letter to one of three treatments: a standard letter, a matching grant letter, or a challenge grant letter. They published the results of this experiment in the _American Economic Review_ in 2007. The article and supporting data are available from the [AEA website](https://www.aeaweb.org/articles?id=10.1257/aer.97.5.1774) and from Innovations for Poverty Action as part of [Harvard's Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/27853&version=4.2).
 
-_to do: expand on the description of the experiment._
-
 This project seeks to replicate their results.
 
 
@@ -141,10 +139,10 @@ print(results.summary())
 ```
 
 ```{python}
-resids = np.array(y-model.predict(x))
-model2= LinearRegression()
-model2.fit(resids.reshape(-1,1),x.flatten())
-model2.coef_
+# resids = np.array(y-model.predict(x))
+# model2= LinearRegression()
+# model2.fit(resids.reshape(-1,1),x.flatten())
+# model2.coef_
 
 ```
 
@@ -188,8 +186,6 @@ model2.coef_
 ```
 As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.
 
-_todo: test a few variables other than the key outcome variables (for example, test months since last donation) to see if the treatment and control groups are statistically significantly different at the 95% confidence level. Do each as a t-test and separately as a linear regression, and confirm you get the exact same results from both methods. When doing a t-test, use the formula in the class slides. When doing the linear regression, regress for example mrm2 on treatment and look at the estimated coefficient on the treatment variable. It might be helpful to compare parts of your analysis to Table 1 in the paper. Be sure to comment on your results (hint: why is Table 1 included in the paper)._
-
 
 ## Experimental Results
 
@@ -197,14 +193,13 @@ _todo: test a few variables other than the key outcome variables (for example, t
 
 First, I analyze whether matched donations lead to an increased response rate of making a donation. 
 
-_todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control._
 ```{python}
 import seaborn as sns 
 sns.barplot(data = data, x= 'treatment', y = 'gave', estimator= 'mean')
 
 
 ```
-_todo: run a t-test between the treatment and control groups on the binary outcome of whether any charitable donation was made. Also run a bivariate linear regression that demonstrates the same finding. (It may help to confirm your calculations match Table 2a Panel A.) Report your statistical results and interpret them in the context of the experiment (e.g., if you found a difference with a small p-value or that was statistically significant at some threshold, what have you learned about human behavior? Use mostly English words, not numbers or stats, to explain your finding.)_
+
 ```{python}
 p1= data[data['treatment']==1]['gave'].mean()
 p2= data[data['treatment']==0]['gave'].mean()
@@ -226,7 +221,7 @@ print(f'p-value: {2*(1-stats.t.cdf(np.abs(t),n1+n2)):.3f}')
 
 
 ```
-_todo: run a probit regression where the outcome variable is whether any charitable donation was made and the explanatory variable is assignment to treatment or control. Confirm that your results replicate Table 3 column 1 in the paper._
+
 
 ```{python}
 
@@ -245,7 +240,7 @@ result.summary()
 
 Next, I assess the effectiveness of different sizes of matched donations on the response rate.
 
-_todo: Use a series of t-tests to test whether the size of the match ratio has an effect on whether people donate or not. For example, does the 2:1 match rate lead increase the likelihood that someone donates as compared to the 1:1 match rate? Do your results support the "figures suggest" comment the authors make on page 8?_
+
 ```{python}
 
 p1= data[data['ratio']==1]['gave'].mean()
@@ -295,8 +290,8 @@ print(f'p-value: {2*(1-stats.t.cdf(np.abs(t),n1+n2)):.3f}')
 
 ```
 
-Difference is very small and stat-insig
-_todo: Assess the same issue using a regression. Specifically, create the variable `ratio1` then regress `gave` on `ratio1`, `ratio2`, and `ratio3` (or alternatively, regress `gave` on the categorical variable `ratio`). Interpret the coefficients and their statistical precision._
+The difference is very small and statistically insignificant 
+
 
 ```{python}
 #data['ratio1']= data['ratio'].astype(float)-data['ratio2']-data['ratio3']

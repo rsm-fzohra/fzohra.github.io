@@ -49,6 +49,8 @@ $$ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) $
 
 
 ```{python}
+#| echo: false
+#| output: false
 import pandas as pd
 import numpy as np
 import scipy as sp
@@ -59,16 +61,22 @@ yogurt.head()
 ```
 
 ```{python}
+#| echo: false
+#| output: false
 yogurt.shape
 
 ```
 
 ```{python}
+#| echo: false
+#| output: false
 yogurt[['y1','y2','y3','y4']].sum(axis = 0)
 
 ```
 
 ```{python}
+#| echo: false
+
 yogurt.describe()
 ```
 
@@ -98,7 +106,10 @@ Reshape and prep the data: The "hard part" of the MNL likelihood function is org
 
 ```{python}
 yogurt_long = pd.wide_to_long(yogurt, stubnames=['y','f', 'p'], i=['id'], j='product').reset_index()
-
+```
+```{python}
+#| echo: false
+#| output: false
 # Add product brand dummies
 yogurt_long['yogurt1'] = (yogurt_long['product'] == 1).astype(int)
 yogurt_long['yogurt2'] = (yogurt_long['product'] == 2).astype(int)
@@ -116,6 +127,8 @@ yogurt_long
 ### Estimation
 
 ```{python}
+#| echo: false
+#| output: false
 yogurt_labels = np.reshape(yogurt[['y1','y2','y3','y4']],(-1, ))
 yogurt_labels.shape 
 
@@ -139,6 +152,7 @@ def multi_ll(beta, y, x, ids):
 ```
 
 ```{python}
+#| echo: false
 beta = np.ones(5)*0
 y= yogurt_labels
 x= yogurt_features
@@ -151,7 +165,7 @@ probs = prob/sum
 -np.log(probs).sum()
 
 
-````
+```
 
 
 
@@ -164,6 +178,8 @@ yogurt_labels.shape
 Finding the MLEs for the 5 parameters ($\beta_1, \beta_2, \beta_3, \beta_f, \beta_p$). 
 
 ```{python}
+#| echo: false
+#| output: false
 
 beta_initial = np.ones(5) * 0.1  
 result = sp.optimize.minimize(multi_ll, beta_initial, (yogurt_labels, yogurt_features, yogurt_id), method='L-BFGS-B', options={'gtol': 1e-5, 'maxiter': 50})
@@ -178,6 +194,7 @@ Taking the diffnce between the beta of the most preferred and the least preferre
 As long as the most preferred yogurt was 12.75 cents/oz more expensive than the least preferred yogurt, consumers are willing to make that extra spend to go after thier preferred brand.  
 
 ```{python}
+#| echo: false
 intercepts = result.x[:3]  
 most_preferred = np.argmax(intercepts)
 least_preferred = np.argmin(intercepts)
@@ -188,6 +205,8 @@ print("Least preferred yogurt is:", least_preferred + 1)
 
 ```
 ```{python}
+#| echo: false
+
 #(0.10002663 +0.0056015) /0.00828118
 
 price_coefficient = result.x[-1] 
@@ -283,6 +302,8 @@ Uniqueness in Data:
 - Number of alternatives: 3 alternatives per task
 
 ```{python}
+#| echo: false
+#| output: false
 data = pd.read_csv("/home/jovyan/Desktop/MGTA495-2/projects/Project 3/rintro-chapter13conjoint.csv")
 ```
 
@@ -292,18 +313,24 @@ data.head()
 ```
 
 ```{python}
+#| echo: false
+#| output: false
 data['resp.id'].nunique()
 
 
 ```
 
 ```{python}
+#| echo: false
+#| output: false
 data['ques'].nunique()
 
 
 ```
 
 ```{python}
+#| echo: false
+#| output: false
 data['alt'].nunique()
 
 
@@ -321,6 +348,8 @@ The attributes (levels) were number of seats (6,7,8), cargo space (2ft, 3ft), en
 
 
 ```{python}
+#| echo: false
+
 from patsy import dmatrices
 import statsmodels.api as sm
 
@@ -382,6 +411,8 @@ Lower prices.
 Consumers are willing to pay $2750 for an foot of space from 2 ft cargo to 3 ft cargo 
 
 ```{python}
+#| echo: false
+#| output: false
 # Extract the price coefficient
 price_coef = mnl_result.params.loc['price'][0]
 
@@ -395,7 +426,7 @@ dollar_value_cargo
 
 ```
 
-_todo: assume the market consists of the following 6 minivans. Predict the market shares of each minivan in the market._
+### Predicting the market shares of each minivan in the market
 
 | Minivan | Seats | Cargo | Engine | Price |
 |---------|-------|-------|--------|-------|
@@ -408,6 +439,7 @@ _todo: assume the market consists of the following 6 minivans. Predict the marke
 
 
 ```{python}
+#| echo: false
 
 coefficients = {
     'Intercept': 5.5322,

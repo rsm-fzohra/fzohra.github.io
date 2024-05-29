@@ -18,27 +18,71 @@ However, Blueprinty has collected data on 1,500 mature (non-startup) engineering
 ### Data
 
 *todo: Read in data.*
-
-```{r}
-data = read.csv("blueprinty.csv")
+```{python}
+import pandas as pd
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+import math 
+from scipy.optimize import minimize
+import patsy
+from scipy.special import gammaln
+data = pd.read_csv("blueprinty.csv")
 ```
+
+```{python}
+data.head()
+```
+
+```{python}
+customer_yes = data[data['iscustomer']== 1]
+customer_no = data[data['iscustomer']== 0]
+```
+
+```{python}
+mean_customer_yes = customer_yes['patents'].mean()
+mean_customer_no = customer_no['patents'].mean()
+
+print(mean_customer_yes)
+print(mean_customer_no)
+```
+
+
+
+
+
+
 
 *todo: Compare histograms and means of number of patents by customer status. What do you observe?*
 
-```{r}
-library(tidyverse)
-head(data)
-customer_yes = data %>% filter(iscustomer==1)
-customer_no = data %>% filter(iscustomer==0)
-mean(customer_yes$patents)
-mean(customer_no$patents)
+```{python}
+
+fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+
+# Plotting histograms for customer_yes and customer_no datasets
+axs[0].hist(customer_yes['patents'], bins=10, color='blue', edgecolor='black')
+axs[0].set_title('Customer Yes: Patents')
+axs[0].set_xlabel('Patents')
+axs[0].set_ylabel('Frequency')
+
+axs[1].hist(customer_no['patents'], bins=10, color='orange', edgecolor='black')
+axs[1].set_title('Customer No: Patents')
+axs[1].set_xlabel('Patents')
+axs[1].set_ylabel('Frequency')
+
+# Adjust layout and show plots
+plt.tight_layout()
+plt.show()
+
+
 ```
 
-```{r}
-par(mfrow=c(1,2))
-hist(customer_yes$patents)
-hist(customer_no$patents)
-```
+Customer_no is right skewed compared to customer_yes, and from this we can confer that while the means show that customer_yes has a small number more patents than customer_no but customer_no has significantly more variance
+
+Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.
+
+
+
 
 Customer no is right skewed compared to customer yes, and from this we can confer that while the means show that customer_yes has a small number more pattents than customer_no but customer_no has significantly more variance
 
@@ -46,27 +90,72 @@ Blueprinty customers are not selected at random. It may be important to account 
 
 *todo: Compare regions and ages by customer status. What do you observe?*
 
-```{r}
-customer_yes %>% group_by(region) %>% 
-  summarize(count= n(),pct = count/nrow(customer_yes))
-customer_no %>% group_by(region) %>% 
-  summarize(count= n(),pct = count/nrow(customer_no))
+## Customer Distribution by Region 
+```{python}
+
+
+# Grouping and summarizing for customer_yes DataFrame
+grouped_yes = customer_yes.groupby('region').agg(
+    count=('region', 'size'),
+).reset_index()
+grouped_yes['pct'] = grouped_yes['count'] / len(customer_yes)
+
+# Grouping and summarizing for customer_no DataFrame
+grouped_no = customer_no.groupby('region').agg(
+    count=('region', 'size'),
+).reset_index()
+grouped_no['pct'] = grouped_no['count'] / len(customer_no)
+
+# Viewing the summarized results
+print(grouped_yes)
+print(grouped_no)
+```
+The table above shows fewer customers in all regions in the customer_no category
+The table splits customer data into two categories based on their status (Yes or No)
+For customers with a "Yes" status:
+Northeast has the highest percentage of customers at 57.36%.
+The other regions follow much lower, with Southwest at 15.74%, South at 10.15%, Midwest at 8.63%, and Northwest at 8.12%.
+For customers with a "No" status:
+Northeast again leads with 37.45% of customers.
+This is followed by Southwest at 20.41%, and Midwest, Northwest, and South all close to each other at 15.89%, 13.12%, and 13.12% respectively.
+
+## Customer Distribution by Age
+```{python}
+# Calculate the mean age for customer_yes and customer_no groups
+mean_age_yes = customer_yes['age'].mean()
+mean_age_no = customer_no['age'].mean()
+
+print("Mean Age of Customers Yes:", mean_age_yes)
+print("Mean Age of Customers No:", mean_age_no)
+
+# Create a 1-row x 2-column grid of subplots
+fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+
+# Plot histogram of age for customer_yes
+axs[0].hist(customer_yes['age'], bins=10, color='blue', edgecolor='black')
+axs[0].set_title('Customer Yes: Age')
+axs[0].set_xlabel('Age')
+axs[0].set_ylabel('Frequency')
+
+# Plot histogram of age for customer_no
+axs[1].hist(customer_no['age'], bins=10, color='orange', edgecolor='black')
+axs[1].set_title('Customer No: Age')
+axs[1].set_xlabel('Age')
+axs[1].set_ylabel('Frequency')
+
+# Adjust layout and show the plots
+plt.tight_layout()
+plt.show()
 ```
 
-fewer customers from the NE in the customer_no
+### Observations
+1- Region Impact: The Northeast dominates in customer numbers for both statuses, suggesting it may be a key market or has a larger base of the targeted demographic. 
 
-```{r}
+2- Age Differences: Customers with a 'Yes' status are generally younger compared to those with a 'No' status, indicating that the younger customers are more active and engaged. 
 
-mean(customer_yes$age)
-mean(customer_no$age)
-par(mfrow=c(1,2))
-hist(customer_yes$age)
-hist(customer_no$age)
+3- Geographic Disparities: There is a clear geographic disparity in customer distribution. The Northeast has a much higher concentration of customers, possibly indicating regional preferences or more succesful market penetration. 
 
-```
-
-customers are slightly younger than our non-customers
-
+The likelihood (or log-likelihood) function (function of lambda and Y) for the Poisson model. 
 ### Estimation of Simple Poisson Model
 
 Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.
@@ -79,36 +168,93 @@ $$
 
 *todo: Code the likelihood (or log-likelihood) function for the Poisson model. This is a function of lambda and Y. For example:*
 
-```{r}
-poisson_loglikelihood <- function(lambda, Y){
-  likelihood= exp(-lambda)*lambda^Y/factorial(Y)
-  ll= sum(log(likelihood))
-  return(ll)
-}
-```
+
+```{python}
+def poisson_loglikelihood(lmbda, Y):
+    # Convert Y to a NumPy array for easier numerical computations
+    Y = np.array(Y)
+
+    # Calculate the Poisson likelihood using NumPy's vectorized operations
+    likelihood = np.exp(-lmbda) * np.power(lmbda, Y) / np.array([math.factorial(y) for y in Y])
+
+    # Compute the sum of log-likelihoods
+    ll = np.sum(np.log(likelihood))
+    return ll
+    ```
+
 
 *todo: Use your function to plot lambda on the horizontal axis and the likelihood (or log-likelihood) on the vertical axis for a range of lambdas (use the observed number of patents as the input for Y).*
 
-```{r}
-lambdas = seq(min(data$patents),max(data$patents))
-lls = c()
-for(i in lambdas){
-  lls=append(lls, poisson_loglikelihood(i,data$patents))
-}
-plot(lambdas,lls)
-  
-```
 
+
+
+```{python}
+
+```
 *4 maximizes*
+```{python}
+def poisson_loglikelihood(lmbda, Y):
+    Y = np.array(Y)
+    likelihood = np.exp(-lmbda) * np.power(lmbda, Y) / np.array([np.math.factorial(y) for y in Y])
+    ll = np.sum(np.log(likelihood))
+    return ll
+
+# Generate a sequence of lambda values from min to max of data['patents']
+min_patents = data['patents'].min()
+max_patents = data['patents'].max()
+lambdas = np.arange(min_patents, max_patents + 1)
+
+# Initialize an empty list to store log-likelihoods
+lls = []
+
+# Calculate the log-likelihood for each lambda value
+for lmbda in lambdas:
+    lls.append(poisson_loglikelihood(lmbda, data['patents']))
+
+# Plot lambda values against the corresponding log-likelihoods
+plt.plot(lambdas, lls, marker='o', linestyle='-')
+plt.xlabel('Lambda')
+plt.ylabel('Log-Likelihood')
+plt.title('Poisson Log-Likelihood vs. Lambda')
+plt.grid(True)
+plt.show()
+
+```
+1- Peak Log-Likelihood- The log-likelihood reaches its peak around 𝜆 = 4 which suggests that this value is the best fit to the observed patent data per the Poisson model 
+
+2- Decrease in Log-Likelihood- As 𝜆 increases beyond 4, there is a sharp decline in the log-likelihood indicating  that the higher values deviate from the best fit. 
+
+3- Shape of the curve- The curve is unimodal with a single peak which is typical in likelihood analysis. This suggests a clear optimum value for 𝜆. 
 
 *todo: If you're feeling mathematical, take the first derivative of your likelihood or log-likelihood, set it equal to zero and solve for lambda. You will find lambda_mle is Ybar, which "feels right" because the mean of a Poisson distribution is lambda.*
 
 *todo: Find the MLE by optimizing your likelihood function with optim() in R or sp.optimize() in Python.*
 
-```{r}
-mle_lambda = optim(2, poisson_loglikelihood,Y = data$patents, control= list(fnscale=-1))
-mle_lambda$par
+### Optimizing the likelihood function to find the MLE 
+```{python}
+# Define the Poisson log-likelihood function (to maximize)
+def poisson_loglikelihood(lmbda, Y):
+    Y = np.array(Y)
+    likelihood = np.exp(-lmbda) * np.power(lmbda, Y) / np.array([np.math.factorial(y) for y in Y])
+    ll = np.sum(np.log(likelihood))
+    return -ll  # Negate because we will minimize
+
+# Sample dataset (replace this with your actual dataset)
+Y = data['patents']
+
+# Initial guess for lambda
+initial_guess = 2
+
+# Optimize using `minimize`, with negation to perform maximization
+result = minimize(poisson_loglikelihood, initial_guess, args=(Y,), method='L-BFGS-B')
+
+# The optimized lambda value (maximum likelihood estimate)
+mle_lambda = result.x[0]
+
+# Display the MLE for lambda
+print(f"MLE for lambda: {mle_lambda}")
 ```
+
 
 ### Estimation of Poisson Regression Model
 
@@ -116,51 +262,100 @@ Next, we extend our simple Poisson model to a Poisson Regression Model such that
 
 *todo: Update your likelihood or log-likelihood function with an additional argument to take in a covariate matrix X. Also change the parameter of the model from lambda to the beta vector. In this model, lambda must be a positive number, so we choose the inverse link function g() to be exp() so that* $\lambda_i = e^{X_i'\beta}$. *For example:*
 
-```         
-poisson_regression_likelihood <- function(beta, Y, X){
-   ...
-}
+```{python}
+def poisson_regression_likelihood(beta, Y, X):
+    # Convert inputs to NumPy arrays for efficient computation
+    beta = np.array(beta)
+    Y = np.array(Y)
+    X = np.array(X)
+    
+    # Compute lambda as the linear combination of X and beta using matrix multiplication
+    lambda_ = np.dot(X, beta)
+    
+    # Ensure lambda is positive to avoid issues with log and exponentiation
+    lambda_ = np.exp(lambda_)
+
+    # Calculate the Poisson log-likelihood terms
+    ll = -lambda_ + Y * np.log(lambda_) - np.array([math.log(math.factorial(y)) for y in Y])
+    
+    # Sum up the log-likelihood values
+    return np.sum(ll)
+
+```
+
+```{python}
+
+def gr(beta, Y, X):
+    # Convert inputs to NumPy arrays for efficient computation
+    beta = np.array(beta)
+    Y = np.array(Y)
+    X = np.array(X)
+    
+    # Compute lambda (using matrix multiplication with exponential)
+    lambda_ = np.dot(X, beta)
+    lambda_ = np.exp(lambda_)
+    
+    # Calculate the gradient of the Poisson log-likelihood
+    gradient = (Y / lambda_) - 1
+    
+    return gradient
 ```
 
 
-```{r}
-poisson_regression_likelihood <- function(beta, Y, X){
-  lambda = exp(X %*% beta) 
-  ll = -lambda + Y*log(lambda)-log(factorial(Y))
-  return (sum(ll))
-}
 
-```
 
-```{r}
-gr <- function(beta, Y, X){
-  lambda = X %*% beta
-  return(Y/lambda-1)
-}
-```
+
+
 
 *todo: Use your function along with R's optim() or Python's sp.optimize() to find the MLE vector and the Hessian of the Poisson model with covariates. Specifically, the first column of X should be all 1's to enable a constant term in the model, and the subsequent columns should be age, age squared, binary variables for all but one of the regions, and the binary customer variable. Use the Hessian to find standard errors of the beta parameter estimates and present a table of coefficients and standard errors.*
 
 *todo: Check your results using R's glm() function or Python sm.GLM() function.*
 
-```{r}
-X = data[,2:5]
-X$age2 = data$age^2
-X = model.matrix(patents~age+age2+iscustomer+factor(region),data = X)
+```{python}
+data['region_enc'] = data['region'].astype('category').cat.codes
+X = data[['age', 'iscustomer', 'region_enc']].copy()
+X['age2'] = data['age'] ** 2
+
+y, X_design = patsy.dmatrices('patents ~ age + I(age **2) + iscustomer + region_enc', data=data, return_type='dataframe')
+
+# Now, X_design is equivalent to the R model matrix, with the response variable in `y`
+```
+```{python}
+# Scaling to 0->1
+# for col in X.columns:
+#     min = X[col].min()
+#     max = X[col].max()
+#     X[col] = (X[col]-min)/(max-min)
 ```
 
-```{r}
-mle_beta = optim(c(1,1,1,1,1,1,1,1), poisson_regression_likelihood, X = X, Y = data$patents, control= list(fnscale=-1))
-mle_beta$par
+```{python}
+# Ensure X is a numpy array
+X = np.array(X)  # Replace with actual data loading if necessary
+
+# Add an intercept column to X (column of ones at the beginning)
+X_with_intercept = np.hstack([np.ones((X.shape[0], 1)), X])
+
+# Define the likelihood function
+def poisson_regression_likelihood(params, X, Y):
+    # Ensure params is used directly as a NumPy array
+
+    eta = np.dot(X, params)
+    mu = np.exp(eta)
+    log_likelihood = np.sum(-mu + Y * np.log(mu) - gammaln(Y + 1))
+    return -log_likelihood
+
+# Initial parameters guess, ensure it's a numpy array
+initial_params = np.ones(X_with_intercept.shape[1]) * 0.1
+
+# Run the minimization
+result = minimize(poisson_regression_likelihood, initial_params, args=(X_with_intercept, Y), method='BFGS')
+mle_beta = result.x
+
+print("MLE Beta Parameters:", mle_beta)
 ```
 
-```         
-```
 
-```{r}
-glmmodel = glm(patents~age+I(age^2)+region+iscustomer,data,family = "poisson")
-summary(glmmodel)
-```
+
 
 *todo: Interpret the results. What do you conclude about the effect of Blueprinty's software on patent success?*
 
@@ -192,31 +387,14 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 
 *todo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided.*
 
-```{r}
-airbnb = read.csv('airbnb.csv')
-```
 
-```{r}
-summary(airbnb)
-```
 
-```{r}
-airbnb2 = drop_na(airbnb)
 
-```
 
-```{r}
-airbnb2$room_type = as.factor(airbnb2$room_type)
-airbnb2$instant_bookable = as.factor(airbnb2$instant_bookable)
-model1 = glm(number_of_reviews~days+room_type+bathrooms+bedrooms+price+review_scores_cleanliness+review_scores_location+review_scores_value+instant_bookable, airbnb2,family = "poisson")
-summary(model1)
-```
 
-```{r}
-cor(airbnb2[,11:13])
-```
 
-```{r}
-model1 = glm(number_of_reviews~days+room_type+bathrooms+bedrooms+price+review_scores_value+instant_bookable, airbnb2,family = "poisson")
-summary(model1)
-```
+
+
+
+
+

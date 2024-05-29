@@ -6,8 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your Name">
-<meta name="dcterms.date" content="2024-05-14">
+<meta name="author" content="Fatma Zohra">
+<meta name="dcterms.date" content="2024-05-21">
 
 <title>FatmaZ_Website - Multinomial Logit Examples</title>
 <style>
@@ -22,10 +22,44 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -67,6 +101,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -123,14 +160,20 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#likelihood-for-the-multi-nomial-logit-mnl-model" id="toc-likelihood-for-the-multi-nomial-logit-mnl-model" class="nav-link" data-scroll-target="#likelihood-for-the-multi-nomial-logit-mnl-model">Likelihood for the Multi-nomial Logit (MNL) Model</a></li>
   <li><a href="#yogurt-dataset" id="toc-yogurt-dataset" class="nav-link" data-scroll-target="#yogurt-dataset">Yogurt Dataset</a></li>
+  </ul></li>
+  <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link" data-scroll-target="#dataset-overview">Dataset Overview:</a></li>
+  <li><a href="#analysis-goals" id="toc-analysis-goals" class="nav-link" data-scroll-target="#analysis-goals">Analysis Goals</a>
+  <ul class="collapse">
   <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation">Estimation</a></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  <li><a href="#market-share-analysis-of-yogurt-brands" id="toc-market-share-analysis-of-yogurt-brands" class="nav-link" data-scroll-target="#market-share-analysis-of-yogurt-brands">Market Share Analysis of Yogurt Brands</a></li>
   </ul></li>
   <li><a href="#estimating-minivan-preferences" id="toc-estimating-minivan-preferences" class="nav-link" data-scroll-target="#estimating-minivan-preferences">2. Estimating Minivan Preferences</a>
   <ul class="collapse">
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#overall-insights" id="toc-overall-insights" class="nav-link" data-scroll-target="#overall-insights">Overall Insights</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -150,14 +193,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Your Name </p>
+             <p>Fatma Zohra </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 14, 2024</p>
+      <p class="date">May 21, 2024</p>
     </div>
   </div>
   
@@ -193,44 +236,899 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="yogurt-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
-<p>We will use the <code>yogurt_data</code> dataset, which provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc.</p>
-<p><em>todo: import the data, maybe show the first few rows, and describe the data a bit.</em></p>
+<div id="99019328" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>yogurt <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/Desktop/MGTA495-2/projects/Project 3/yogurt_data.csv'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>yogurt.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">y1</th>
+<th data-quarto-table-cell-role="th">y2</th>
+<th data-quarto-table-cell-role="th">y3</th>
+<th data-quarto-table-cell-role="th">y4</th>
+<th data-quarto-table-cell-role="th">f1</th>
+<th data-quarto-table-cell-role="th">f2</th>
+<th data-quarto-table-cell-role="th">f3</th>
+<th data-quarto-table-cell-role="th">f4</th>
+<th data-quarto-table-cell-role="th">p1</th>
+<th data-quarto-table-cell-role="th">p2</th>
+<th data-quarto-table-cell-role="th">p3</th>
+<th data-quarto-table-cell-role="th">p4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.081</td>
+<td>0.061</td>
+<td>0.079</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.064</td>
+<td>0.075</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.061</td>
+<td>0.086</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.061</td>
+<td>0.086</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.125</td>
+<td>0.098</td>
+<td>0.049</td>
+<td>0.079</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="470fc112" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>yogurt.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(2430, 13)</code></pre>
+</div>
+</div>
+<div id="87bd9792" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yogurt[[<span class="st">'y1'</span>,<span class="st">'y2'</span>,<span class="st">'y3'</span>,<span class="st">'y4'</span>]].<span class="bu">sum</span>(axis <span class="op">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>y1    831
+y2    975
+y3     71
+y4    553
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="2a58fe04" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>yogurt.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">y1</th>
+<th data-quarto-table-cell-role="th">y2</th>
+<th data-quarto-table-cell-role="th">y3</th>
+<th data-quarto-table-cell-role="th">y4</th>
+<th data-quarto-table-cell-role="th">f1</th>
+<th data-quarto-table-cell-role="th">f2</th>
+<th data-quarto-table-cell-role="th">f3</th>
+<th data-quarto-table-cell-role="th">f4</th>
+<th data-quarto-table-cell-role="th">p1</th>
+<th data-quarto-table-cell-role="th">p2</th>
+<th data-quarto-table-cell-role="th">p3</th>
+<th data-quarto-table-cell-role="th">p4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>2430.0000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+<td>2430.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>1215.5000</td>
+<td>0.341975</td>
+<td>0.401235</td>
+<td>0.029218</td>
+<td>0.227572</td>
+<td>0.055556</td>
+<td>0.039506</td>
+<td>0.037449</td>
+<td>0.037449</td>
+<td>0.106248</td>
+<td>0.081532</td>
+<td>0.053622</td>
+<td>0.079507</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>701.6249</td>
+<td>0.474469</td>
+<td>0.490249</td>
+<td>0.168452</td>
+<td>0.419351</td>
+<td>0.229109</td>
+<td>0.194836</td>
+<td>0.189897</td>
+<td>0.189897</td>
+<td>0.020587</td>
+<td>0.011047</td>
+<td>0.008054</td>
+<td>0.007714</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.0000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>-0.012000</td>
+<td>0.000000</td>
+<td>0.025000</td>
+<td>0.004000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>608.2500</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.103000</td>
+<td>0.081000</td>
+<td>0.050000</td>
+<td>0.079000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>1215.5000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.108000</td>
+<td>0.086000</td>
+<td>0.054000</td>
+<td>0.079000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>1822.7500</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.115000</td>
+<td>0.086000</td>
+<td>0.061000</td>
+<td>0.086000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>2430.0000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>0.193000</td>
+<td>0.111000</td>
+<td>0.086000</td>
+<td>0.104000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dataset-overview" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-overview">Dataset Overview:</h2>
+<p>The dataset consists of several columns that capture various aspects of the yogurt purchasing decision. 1- ID: A unique identifier for each customer 2- y1,y2,y3,y4: Binary indicators representing whether a customer preferred a particulat yogurt brand, 1 being preferred and 0 being not preferred 3- f1,f2,f3,f4: Binary indicators showing whether each yogurt was featrued in a promotional display 4- p1,p2,p3,p4: Prices of the respective yogurt brabds at the time of purchase</p>
+</section>
+<section id="analysis-goals" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-goals">Analysis Goals</h2>
+<p>Using the MNL Model, we aim to achieve the following: 1- <code>Estimate Customer Preferences</code>: Determine which yogurt brand is most preferred based on estimated coefficients. 2- <code>Price Senstivity Analysis</code>: Understand how changes in prices influence consumer choices. 3- <code>Market Share Simulation</code>: Simulate market share changes under different pricing scenarios.</p>
 <p>Let the vector of product features include brand dummy variables for yogurts 1-3 (we’ll omit a dummy for product 4 to avoid multi-collinearity), a dummy variable to indicate if a yogurt was featured, and a continuous variable for the yogurts’ prices:</p>
 <p><span class="math display">\[ x_j' = [\mathbbm{1}(\text{Yogurt 1}), \mathbbm{1}(\text{Yogurt 2}), \mathbbm{1}(\text{Yogurt 3}), X_f, X_p] \]</span></p>
-<p>The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
+<p><span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
 <p>What we would like to do is reorganize the data from a “wide” shape with <span class="math inline">\(n\)</span> rows and multiple columns for each covariate, to a “long” shape with <span class="math inline">\(n \times J\)</span> rows and a single column for each covariate. As part of this re-organization, we’ll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be “pivoted” or “melted” from wide to long.</p>
-<p><em>todo: reshape and prep the data</em></p>
-</section>
+<p>Reshape and prep the data: The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate)</p>
+<div id="7c9c0f18" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>yogurt_long <span class="op">=</span> pd.wide_to_long(yogurt, stubnames<span class="op">=</span>[<span class="st">'y'</span>,<span class="st">'f'</span>, <span class="st">'p'</span>], i<span class="op">=</span>[<span class="st">'id'</span>], j<span class="op">=</span><span class="st">'product'</span>).reset_index()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add product brand dummies</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'yogurt1'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'yogurt2'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">2</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'yogurt3'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">3</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns and drop unnecessary ones</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>yogurt_long.rename(columns<span class="op">=</span>{<span class="st">'f'</span>: <span class="st">'featured'</span>, <span class="st">'p'</span>: <span class="st">'price'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the DataFrame</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>yogurt_features<span class="op">=</span> yogurt_long[[<span class="st">'yogurt1'</span>,<span class="st">'yogurt2'</span>,<span class="st">'yogurt3'</span>,<span class="st">'featured'</span>,<span class="st">'price'</span>]]</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>yogurt_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">product</th>
+<th data-quarto-table-cell-role="th">y</th>
+<th data-quarto-table-cell-role="th">featured</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">yogurt1</th>
+<th data-quarto-table-cell-role="th">yogurt2</th>
+<th data-quarto-table-cell-role="th">yogurt3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.125</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9715</td>
+<td>2426</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0.086</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9716</td>
+<td>2427</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0.086</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9717</td>
+<td>2428</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0.086</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9718</td>
+<td>2429</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0.086</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9719</td>
+<td>2430</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0.079</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>9720 rows × 8 columns</p>
+</div>
+</div>
+</div>
 <section id="estimation" class="level3">
 <h3 class="anchored" data-anchor-id="estimation">Estimation</h3>
-<p><em>todo: Code up the log-likelihood function.</em></p>
-<p><em>todo: Use <code>optim()</code> in R or <code>optimize()</code> in Python to find the MLEs for the 5 parameters (<span class="math inline">\(\beta_1, \beta_2, \beta_3, \beta_f, \beta_p\)</span>). (Hint: you should find 2 positive and 1 negative product intercepts, a small positive coefficient estimate for featured, and a large negative coefficient estimate for price.)</em></p>
+<div id="21e1ecd6" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>yogurt_labels <span class="op">=</span> np.reshape(yogurt[[<span class="st">'y1'</span>,<span class="st">'y2'</span>,<span class="st">'y3'</span>,<span class="st">'y4'</span>]],(<span class="op">-</span><span class="dv">1</span>, ))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>yogurt_labels.shape </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>yogurt_id <span class="op">=</span> yogurt[<span class="st">'id'</span>].repeat(<span class="dv">4</span>).reset_index(drop <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>The log-likelihood function</code></p>
+<div id="b488b672" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_ll(beta, y, x, ids):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span> x.to_numpy()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    prob <span class="op">=</span> np.exp(x.dot(beta))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame({<span class="st">'prob'</span>:prob,<span class="st">'ids'</span>:ids})</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#sum = df.groupby('ids')['prob'].sum().repeat(4).reset_index(drop= True)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    sum_prob <span class="op">=</span> df.groupby(<span class="st">'ids'</span>)[<span class="st">'prob'</span>].transform(<span class="st">'sum'</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> prob<span class="op">/</span>sum_prob</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>np.log(probs).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b81e1110" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> np.ones(<span class="dv">5</span>)<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span> yogurt_labels</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span> yogurt_features</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>i<span class="op">=</span> yogurt_id</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span> x.to_numpy()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> np.exp(x.dot(beta))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'prob'</span>:prob,<span class="st">'ids'</span>:i})</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span> <span class="op">=</span> df.groupby(<span class="st">'ids'</span>)[<span class="st">'prob'</span>].transform(<span class="st">'sum'</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>probs <span class="op">=</span> prob<span class="op">/</span><span class="bu">sum</span> </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="op">-</span>np.log(probs).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>13474.781190085338</code></pre>
+</div>
+</div>
+<div id="711af5af" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>yogurt_features.shape</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>yogurt_labels.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>(9720,)</code></pre>
+</div>
+</div>
+<p>Finding the MLEs for the 5 parameters (<span class="math inline">\(\beta_1, \beta_2, \beta_3, \beta_f, \beta_p\)</span>).</p>
+<div id="34cd3cfd" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beta_initial <span class="op">=</span> np.ones(<span class="dv">5</span>) <span class="op">*</span> <span class="fl">0.1</span>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> sp.optimize.minimize(multi_ll, beta_initial, (yogurt_labels, yogurt_features, yogurt_id), method<span class="op">=</span><span class="st">'L-BFGS-B'</span>, options<span class="op">=</span>{<span class="st">'gtol'</span>: <span class="fl">1e-5</span>, <span class="st">'maxiter'</span>: <span class="dv">50</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="discussion" class="level3">
 <h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
-<p>We learn…</p>
-<p><em>todo: interpret the 3 product intercepts (which yogurt is most preferred?).</em></p>
-<p><em>todo: use the estimated price coefficient as a dollar-per-util conversion factor. Use this conversion factor to calculate the dollar benefit between the most-preferred yogurt (the one with the highest intercept) and the least preferred yogurt (the one with the lowest intercept). This is a per-unit monetary measure of brand value.</em></p>
+<p>Looking at the intercepts (0.09970444, 0.10002663 and -0.0056015) we can infer that yogurt 2 was the most preferred and yogurt 3 is the least preferred.</p>
+<p>Taking the diffnce between the beta of the most preferred and the least preferred ygurt we can estimate the price difference consumers are willing to pay for their preferred brand. As long as the most preferred yogurt was 12.75 cents/oz more expensive than the least preferred yogurt, consumers are willing to make that extra spend to go after thier preferred brand.</p>
+<div id="5968032a" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>intercepts <span class="op">=</span> result.x[:<span class="dv">3</span>]  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>most_preferred <span class="op">=</span> np.argmax(intercepts)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>least_preferred <span class="op">=</span> np.argmin(intercepts)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Intercepts for Yogurt 1, 2, and 3:"</span>, intercepts)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Most preferred yogurt is:"</span>, most_preferred <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Least preferred yogurt is:"</span>, least_preferred <span class="op">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Intercepts for Yogurt 1, 2, and 3: [ 0.09970444  0.10002663 -0.0056015 ]
+Most preferred yogurt is: 2
+Least preferred yogurt is: 3</code></pre>
+</div>
+</div>
+<div id="922239a7" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#(0.10002663 +0.0056015) /0.00828118</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>price_coefficient <span class="op">=</span> result.x[<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>dollar_benefit <span class="op">=</span> (intercepts[most_preferred] <span class="op">-</span> intercepts[least_preferred]) <span class="op">*</span> <span class="op">-</span>price_coefficient</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dollar benefit between the most and least preferred yogurt:"</span>, dollar_benefit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dollar benefit between the most and least preferred yogurt: -0.0008747252446890821</code></pre>
+</div>
+</div>
 <p>One benefit of the MNL model is that we can simulate counterfactuals (eg, what if the price of yogurt 1 was $0.10/oz instead of $0.08/oz).</p>
-<p><em>todo: calculate the market shares in the market at the time the data were collected. Then, increase the price of yogurt 1 by $0.10 and use your fitted model to predict p(y|x) for each consumer and each product (this should be a matrix of <span class="math inline">\(N \times 4\)</span> estimated choice probabilities. Take the column averages to get the new, expected market shares that result from the $0.10 price increase to yogurt 1. Do the yogurt 1 market shares decrease?</em></p>
+</section>
+<section id="market-share-analysis-of-yogurt-brands" class="level3">
+<h3 class="anchored" data-anchor-id="market-share-analysis-of-yogurt-brands">Market Share Analysis of Yogurt Brands</h3>
+<p>In our analysis of consumer prefrences for yogurt brands, we utilized the Multinomial Logit (MNL) model to estimate the current market shares and simulate the impact of a price change on consumer choices. Following results were obtained: The estimated market shares indicated that 100% of the market share was attibuted to Yogurt 1: - Yogurt 1: 100% - Yogurt 2: 0% - Yogurt 3: 0% - Yogurt 4: 0% <code>Impact of Price Increase on Yogurt 1</code> To understand the sensitivity of consumer choices to price changes, we simulated a scenario where the price of Yogurt 1 was increased by $0.10 per unit. The new market shares after this price increase remained unchanged:</p>
+<p>Yogurt 1: 100% Yogurt 2: 0% Yogurt 3: 0% Yogurt 4: 0% Key Insights Uniform Preference: The current results indicate a uniform preference for Yogurt 1 among all consumers in the dataset. This outcome suggests that either all consumers chose Yogurt 1 or there is a potential issue with the dataset or model. Based on the intercept calculation however, yogurt 2 was the most preferred choice of consumer which further underscores an issue either in the data set or the analysis model.</p>
+<p>Price Insensitivity: Despite increasing the price of Yogurt 1 by $0.10, the market share for Yogurt 1 did not decrease. This implies that, within the context of the data and model, consumers are not sensitive to this price change.</p>
+<p>Further Investigation Needed: The results are surprising and may indicate an underlying issue with the data or model. It is important to verify the dataset to ensure it accurately represents a diverse set of consumer preferences and to reassess the MNL model implementation to confirm it is correctly specified.</p>
+<p>Conclusion Our initial and revised analyses using the Multinomial Logit model both yielded unexpected results, with 100% of market share attributed to Yogurt 1 regardless of a price increase. This highlights the importance of data and model validation in ensuring accurate and meaningful insights. By addressing these potential issues, we can better understand consumer preferences and market dynamics, ultimately guiding more effective pricing and promotional strategies.</p>
+<div id="4f8b675f" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_market_shares(beta, features):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    utilities <span class="op">=</span> np.dot(features, beta)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    exp_utilities <span class="op">=</span> np.exp(utilities)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> exp_utilities.ndim <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        exp_utilities <span class="op">=</span> exp_utilities.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    shares <span class="op">=</span> exp_utilities <span class="op">/</span> np.<span class="bu">sum</span>(exp_utilities, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> shares.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Current market shares</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>current_shares <span class="op">=</span> calculate_market_shares(result.x, yogurt_features)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Current market shares:"</span>, current_shares)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate price increase for yogurt1</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>yogurt_features_adjusted <span class="op">=</span> yogurt_features.copy()</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>yogurt_features_adjusted.loc[yogurt_features_adjusted[<span class="st">'yogurt1'</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="st">'price'</span>] <span class="op">+=</span> <span class="fl">0.10</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># New market shares after price increase</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>new_shares <span class="op">=</span> calculate_market_shares(result.x, yogurt_features_adjusted)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"New market shares after price increase to yogurt 1:"</span>, new_shares)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the market shares for yogurt 1 decrease</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Do the yogurt 1 market shares decrease?"</span>, <span class="st">"Yes"</span> <span class="cf">if</span> new_shares[<span class="dv">0</span>] <span class="op">&lt;</span> current_shares[<span class="dv">0</span>] <span class="cf">else</span> <span class="st">"No"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Current market shares: [1.]
+New market shares after price increase to yogurt 1: [1.]
+Do the yogurt 1 market shares decrease? No</code></pre>
+</div>
+</div>
+<div id="a5c2e4ee" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of beta:"</span>, beta.shape)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of yogurt_features:"</span>, yogurt_features.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Shape of beta: (5,)
+Shape of yogurt_features: (9720, 5)</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="estimating-minivan-preferences" class="level2">
 <h2 class="anchored" data-anchor-id="estimating-minivan-preferences">2. Estimating Minivan Preferences</h2>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<p><em>todo: download the dataset from here:</em> http://goo.gl/5xQObB</p>
-<p><em>todo: describe the data a bit. How many respondents took the conjoint survey? How many choice tasks did each respondent complete? How many alternatives were presented on each choice task? For each alternative.</em></p>
+<p>Basic Information about the data: The survey contains 9000 rows, with 9 columns. Price ranges from 30,000 to 40,000 with a mean of 35,003.89. Seats are in the configuration of 6,7 and 8 with a mean of 7. About 33.33% of the alternatives have been chosen, indicating that the data includes one choice per three alternatives. Uniqueness in Data: - Number of respondents: 200 - Number of choice tasks: 15 by each respondent - Number of alternatives: 3 alternatives per task</p>
+<div id="e5a58311" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"/home/jovyan/Desktop/MGTA495-2/projects/Project 3/rintro-chapter13conjoint.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="66a74936" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">resp.id</th>
+<th data-quarto-table-cell-role="th">ques</th>
+<th data-quarto-table-cell-role="th">alt</th>
+<th data-quarto-table-cell-role="th">carpool</th>
+<th data-quarto-table-cell-role="th">seat</th>
+<th data-quarto-table-cell-role="th">cargo</th>
+<th data-quarto-table-cell-role="th">eng</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>yes</td>
+<td>6</td>
+<td>2ft</td>
+<td>gas</td>
+<td>35</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>yes</td>
+<td>8</td>
+<td>3ft</td>
+<td>hyb</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>yes</td>
+<td>6</td>
+<td>3ft</td>
+<td>gas</td>
+<td>30</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>yes</td>
+<td>6</td>
+<td>2ft</td>
+<td>gas</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>yes</td>
+<td>7</td>
+<td>3ft</td>
+<td>gas</td>
+<td>35</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="a0c172da" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'resp.id'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>200</code></pre>
+</div>
+</div>
+<div id="2e58eef1" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'ques'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>15</code></pre>
+</div>
+</div>
+<div id="cad6a16d" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'alt'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>3</code></pre>
+</div>
+</div>
+<div id="ec823fa0" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>(9000, 9)</code></pre>
+</div>
+</div>
 <p>The attributes (levels) were number of seats (6,7,8), cargo space (2ft, 3ft), engine type (gas, hybrid, electric), and price (in thousands of dollars).</p>
 </section>
 <section id="model" class="level3">
 <h3 class="anchored" data-anchor-id="model">Model</h3>
-<p><em>todo: estimate a MNL model omitting the following levels to avoide multicollinearity (6 seats, 2ft cargo, and gas engine). Include price as a continuous variable. Show a table of coefficients and standard errors. You may use your own likelihood function from above, or you may use a function from a package/library to perform the estimation.</em></p>
+<div id="6abcb127" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> patsy <span class="im">import</span> dmatrices</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> <span class="st">'choice ~ C(seat, Treatment(6)) + C(cargo, Treatment("2ft")) + C(eng, Treatment("gas")) + price'</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>y, X <span class="op">=</span> dmatrices(formula, data, return_type<span class="op">=</span><span class="st">'dataframe'</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the MNL model</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>mnl_model <span class="op">=</span> sm.MNLogit(y, X)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>mnl_result <span class="op">=</span> mnl_model.fit()</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>mnl_result.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimization terminated successfully.
+         Current function value: 0.558663
+         Iterations 6</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>MNLogit Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>choice</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>9000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>MNLogit</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>8993</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>MLE</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 21 May 2024</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
+<td>0.1223</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:31:28</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-5028.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">converged:</td>
+<td>True</td>
+<td data-quarto-table-cell-role="th">LL-Null:</td>
+<td>-5728.6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th">LLR p-value:</td>
+<td>1.252e-299</td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">choice=1</td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>5.5322</td>
+<td>0.224</td>
+<td>24.677</td>
+<td>0.000</td>
+<td>5.093</td>
+<td>5.972</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(seat, Treatment(6))[T.7]</td>
+<td>-0.5248</td>
+<td>0.060</td>
+<td>-8.800</td>
+<td>0.000</td>
+<td>-0.642</td>
+<td>-0.408</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(seat, Treatment(6))[T.8]</td>
+<td>-0.2931</td>
+<td>0.059</td>
+<td>-5.009</td>
+<td>0.000</td>
+<td>-0.408</td>
+<td>-0.178</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(cargo, Treatment("2ft"))[T.3ft]</td>
+<td>0.4385</td>
+<td>0.049</td>
+<td>9.004</td>
+<td>0.000</td>
+<td>0.343</td>
+<td>0.534</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(eng, Treatment("gas"))[T.elec]</td>
+<td>-1.4347</td>
+<td>0.062</td>
+<td>-23.217</td>
+<td>0.000</td>
+<td>-1.556</td>
+<td>-1.314</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(eng, Treatment("gas"))[T.hyb]</td>
+<td>-0.7605</td>
+<td>0.057</td>
+<td>-13.361</td>
+<td>0.000</td>
+<td>-0.872</td>
+<td>-0.649</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">price</td>
+<td>-0.1591</td>
+<td>0.006</td>
+<td>-25.616</td>
+<td>0.000</td>
+<td>-0.171</td>
+<td>-0.147</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
-<p><em>todo: Interpret the coefficients. Which features are more preferred?</em></p>
-<p><em>todo: Use the price coefficient as a dollar-per-util conversion factor. What is the dollar value of 3ft of cargo space as compared to 2ft of cargo space?</em></p>
+<p><code>Coefficients Interpretation</code> Intercept: The large positive intercept (5.5322) suggests a strong baseline propensity towards choosing an alternative when all variables are at their reference levels (6 seats, 2ft cargo, gas engine, and a base price).</p>
+<p>Seats:</p>
+<p>7 seats (C(seat, Treatment(6))[T.7]): The negative coefficient (-0.5248) indicates that, holding other factors constant, consumers are less likely to choose minivans with 7 seats compared to 6 seats. 8 seats (C(seat, Treatment(6))[T.8]): Similarly, the negative coefficient (-0.2931) suggests that minivans with 8 seats are also less preferred than those with 6 seats, though the effect is smaller than for 7 seats.</p>
+<p>Cargo: 3ft (C(cargo, Treatment(“2ft”))[T.3ft]): The positive coefficient (0.4385) indicates a preference for 3ft of cargo space over 2ft, suggesting that consumers value larger cargo space.</p>
+<p>Engine Type: Electric (C(eng, Treatment(“gas”))[T.elec]): The negative coefficient (-1.4347) strongly indicates that electric engines are less preferred compared to gas engines. Hybrid (C(eng, Treatment(“gas”))[T.hyb]): The negative coefficient (-0.7605) shows that hybrids are also less preferred than gas engines, but the disfavor is less pronounced compared to electric engines.</p>
+<p>Price: The negative coefficient (-0.1591) for price confirms the expected behavior: as price increases, the likelihood of choosing that minivan decreases.</p>
+<p>Statistical Significance All predictors are statistically significant (p-values &lt; 0.000), indicating strong evidence against the null hypothesis for each coefficient.</p>
+<p>Standard Errors The standard errors provide an estimate of the standard deviation of the coefficients’ sampling distribution. Smaller values indicate more precise estimates. For instance, the relatively low standard errors for the engine type coefficients (0.062 and 0.057) suggest that these estimates are precise.</p>
+<p>Model Fit and Metrics Pseudo R-squared (0.1223): This value suggests that the model explains about 12.23% of the variance in choice relative to a model without predictors. This isn’t particularly high, but it’s not unusual in choice modeling where many unobserved factors can influence decisions. Log-Likelihood and LL-Null: The difference in log-likelihood between the model and the null model (LL-Null) indicates that the predictors significantly improve the fit of the model.</p>
+<p>Summary The model suggests that consumers prefer: 6 seats over 7 or 8 seats. More cargo space (3ft over 2ft). Gas engines over electric or hybrid engines. Lower prices.</p>
+<p>Consumers are willing to pay $2750 for an foot of space from 2 ft cargo to 3 ft cargo</p>
+<div id="83e5d2fe" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the price coefficient</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>price_coef <span class="op">=</span> mnl_result.params.loc[<span class="st">'price'</span>][<span class="dv">0</span>]</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficient for cargo space (3ft vs 2ft)</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>cargo_coef <span class="op">=</span> mnl_result.params.loc[<span class="st">'C(cargo, Treatment("2ft"))[T.3ft]'</span>][<span class="dv">0</span>]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the dollar value of 3ft of cargo space compared to 2ft</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>dollar_value_cargo <span class="op">=</span> cargo_coef <span class="op">/</span> <span class="bu">abs</span>(price_coef)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>dollar_value_cargo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>2.755802315180663</code></pre>
+</div>
+</div>
 <p><em>todo: assume the market consists of the following 6 minivans. Predict the market shares of each minivan in the market.</em></p>
 <table class="table">
 <thead>
@@ -287,7 +1185,68 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p><em>hint: this example is taken from the “R 4 Marketing Research” book by Chapman and Feit. I believe the same example is present in the companion book titled “Python 4 Marketing Research”. I encourage you to attempt these questions on your own, but if you get stuck or would like to compare you results to “the answers,” you may consult the Chapman and Feit books.</em></p>
+<div id="ac7d2701" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>coefficients <span class="op">=</span> {</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Intercept'</span>: <span class="fl">5.5322</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C(seat, Treatment(6))[T.7]'</span>: <span class="op">-</span><span class="fl">0.5248</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C(seat, Treatment(6))[T.8]'</span>: <span class="op">-</span><span class="fl">0.2931</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C(cargo, Treatment("2ft"))[T.3ft]'</span>: <span class="fl">0.4385</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C(eng, Treatment("gas"))[T.elec]'</span>: <span class="op">-</span><span class="fl">1.4347</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C(eng, Treatment("gas"))[T.hyb]'</span>: <span class="op">-</span><span class="fl">0.7605</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'price'</span>: <span class="op">-</span><span class="fl">0.1591</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>new_data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"seat"</span>: [<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">7</span>],</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cargo"</span>: [<span class="st">'2ft'</span>, <span class="st">'2ft'</span>, <span class="st">'2ft'</span>, <span class="st">'3ft'</span>, <span class="st">'2ft'</span>, <span class="st">'2ft'</span>],</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eng"</span>: [<span class="st">'Hyb'</span>, <span class="st">'Gas'</span>, <span class="st">'Gas'</span>, <span class="st">'Gas'</span>, <span class="st">'Elec'</span>, <span class="st">'Hyb'</span>],</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"price"</span>: [<span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">35</span>]</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate utility for each minivan</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_utility(row):</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">=</span> coefficients[<span class="st">'Intercept'</span>]</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'C(seat, Treatment(6))[T.7]'</span>] <span class="op">*</span> (row[<span class="st">'seat'</span>] <span class="op">==</span> <span class="dv">7</span>)</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'C(seat, Treatment(6))[T.8]'</span>] <span class="op">*</span> (row[<span class="st">'seat'</span>] <span class="op">==</span> <span class="dv">8</span>)</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'C(cargo, Treatment("2ft"))[T.3ft]'</span>] <span class="op">*</span> (row[<span class="st">'cargo'</span>] <span class="op">==</span> <span class="st">'3ft'</span>)</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'C(eng, Treatment("gas"))[T.elec]'</span>] <span class="op">*</span> (row[<span class="st">'eng'</span>] <span class="op">==</span> <span class="st">'Elec'</span>)</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'C(eng, Treatment("gas"))[T.hyb]'</span>] <span class="op">*</span> (row[<span class="st">'eng'</span>] <span class="op">==</span> <span class="st">'Hyb'</span>)</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">+=</span> coefficients[<span class="st">'price'</span>] <span class="op">*</span> row[<span class="st">'price'</span>]</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> utility</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>new_data[<span class="st">'utility'</span>] <span class="op">=</span> new_data.<span class="bu">apply</span>(calculate_utility, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probabilities using softmax</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>    e_x <span class="op">=</span> np.exp(x <span class="op">-</span> np.<span class="bu">max</span>(x))</span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> e_x <span class="op">/</span> e_x.<span class="bu">sum</span>()</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>new_data[<span class="st">'probability'</span>] <span class="op">=</span> softmax(new_data[<span class="st">'utility'</span>])</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(new_data[[<span class="st">'probability'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   probability
+0     0.116071
+1     0.419684
+2     0.313062
+3     0.078430
+4     0.020365
+5     0.052389</code></pre>
+</div>
+</div>
+<p>Market Share for each of the sox minivans</p>
+<p>Minivan A: 11.61% Minivan B: 41.97% Minivan C: 31.31% Minivan D: 7.84% Minivan E: 2.04% Minivan F: 5.24%</p>
+<p>Interpretation of Probabilities</p>
+<p>Minivan A (0.116071): This model, with 7 seats, 2ft of cargo space, a hybrid engine, and a price of $30,000, has a predicted market share of about 11.6%. This suggests it’s a moderately appealing option, likely benefiting from its hybrid engine and lower price.</p>
+<p>Minivan B (0.419684): This minivan, which features 6 seats, 2ft of cargo space, a gasoline engine, and a price of $30,000, has the highest predicted market share at approximately 41.97%. Its appeal is likely due to having the baseline level for seats (6) and engine type (gas), combined with a lower price, aligning well with consumer preferences.</p>
+<p>Minivan C (0.313062): With 8 seats, 2ft of cargo, a gasoline engine, and also priced at $30,000, this model has a substantial market share of about 31.31%. Its higher number of seats might appeal to those needing more seating capacity, despite the generally lower preference for more than 6 seats.</p>
+<p>Minivan D (0.078430): This minivan offers 7 seats, 3ft of cargo space, a gasoline engine, and is priced at $40,000, which results in a lower predicted market share of approximately 7.84%. The higher price and possibly less preferred seating configuration contribute to its lower attractiveness.</p>
+<p>Minivan E (0.020365): Featuring 6 seats, 2ft of cargo, an electric engine, and a higher price of $40,000, this model has the lowest market share at about 2.04%. The electric engine and higher price significantly reduce its appeal, as reflected in the model coefficients.</p>
+<p>Minivan F (0.052389): This minivan, similar to A but priced at $35,000, sees a reduced market share of about 5.24%. The increase in price compared to Minivan A likely accounts for its reduced attractiveness despite similar other features.</p>
+</section>
+<section id="overall-insights" class="level3">
+<h3 class="anchored" data-anchor-id="overall-insights">Overall Insights</h3>
+<p>Price Sensitivity: There’s a clear sensitivity to price changes, with cheaper models generally having higher market shares. Preference for Gas Engines: Models with gas engines are more preferred over hybrid or electric, especially at the same price points. Impact of Seat Configuration: While baseline seat configurations (6 seats) tend to be more popular, there’s notable interest in models with more seats (8), provided the price remains competitive. Cargo Space: The effect of cargo space isn’t clearly dominant in these predictions, as only Minivan D offered more cargo space but at a higher price, affecting its overall appeal.</p>
 
 
 </section>
