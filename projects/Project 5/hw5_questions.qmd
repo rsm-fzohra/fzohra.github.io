@@ -1,0 +1,27 @@
+---
+title: "Segmentation Methods"
+author: "Your Name"
+date: today
+---
+
+
+## K-Means
+
+_todo: write your own code to implement the k-means algorithm.  Make plots of the various steps the algorithm takes so you can "see" the algorithm working.  Test your algorithm on either the Iris or PalmerPenguins datasets.  Compare your results to the built-in `kmeans` function in R or Python._
+
+_todo: Calculate both the within-cluster-sum-of-squares and silhouette scores (you can use built-in functions to do so) and plot the results for various numbers of clusters (ie, K=2,3,...,7). How many clusters are suggested by these two metrics?_
+
+
+
+## Latent-Class MNL
+
+
+_todo: Use the Yogurt dataset from HW3 to estimate a latent-class MNL model.  This model was formally introduced in the paper by Kamakura & Russell (1989), which you may want to read or reference. Compare the results to the standard (aggregate) MNL model from HW3.  What are the differences in the parameter estimates?_
+
+_todo: Fit the latent-class MNL model with 2, 3, ..., K classes. How many classes are suggested by the BIC?  The Bayesian-Schwarz Information Criterion [link](https://en.wikipedia.org/wiki/Bayesian_information_criterion) is a metric that assess the benefit of a better log likelihood at the expense of additional parameters to estimate -- akin to the adjusted R-squared for the linear regression model. Note, however, that a lower BIC indicates a better model fit, accounting for the number of parameters in the model._
+
+
+
+
+
+

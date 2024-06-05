@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Fatma Zohra">
-<meta name="dcterms.date" content="2024-05-28">
+<meta name="dcterms.date" content="2024-05-31">
 
 <title>Multinomial Logit Examples</title>
 <style>
@@ -103,7 +103,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 28, 2024</p>
+      <p class="date">May 31, 2024</p>
     </div>
   </div>
   
@@ -139,7 +139,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="yogurt-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
-<div id="b525560d" class="cell" data-execution_count="4">
+<div id="5f750f0b" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
@@ -312,13 +312,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
 <p>What we would like to do is reorganize the data from a “wide” shape with <span class="math inline">\(n\)</span> rows and multiple columns for each covariate, to a “long” shape with <span class="math inline">\(n \times J\)</span> rows and a single column for each covariate. As part of this re-organization, we’ll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be “pivoted” or “melted” from wide to long.</p>
 <p>Reshape and prep the data: The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate)</p>
-<div id="76d1dabe" class="cell" data-execution_count="5">
+<div id="5a7acb0b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>yogurt_long <span class="op">=</span> pd.wide_to_long(yogurt, stubnames<span class="op">=</span>[<span class="st">'y'</span>,<span class="st">'f'</span>, <span class="st">'p'</span>], i<span class="op">=</span>[<span class="st">'id'</span>], j<span class="op">=</span><span class="st">'product'</span>).reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="estimation" class="level3">
 <h3 class="anchored" data-anchor-id="estimation">Estimation</h3>
 <p><code>The log-likelihood function</code></p>
-<div id="217198b4" class="cell" data-execution_count="8">
+<div id="18146f79" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_ll(beta, y, x, ids):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span> x.to_numpy()</span>
@@ -329,12 +329,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> prob<span class="op">/</span>sum_prob</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>np.log(probs).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="069175e1" class="cell" data-execution_count="9">
+<div id="ea542510" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>13474.781190085338</code></pre>
 </div>
 </div>
-<div id="2bc5ded4" class="cell" data-execution_count="10">
+<div id="0c4ee8cf" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yogurt_features.shape</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>yogurt_labels.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
@@ -347,14 +347,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
 <p>Looking at the intercepts (0.09970444, 0.10002663 and -0.0056015) we can infer that yogurt 2 was the most preferred and yogurt 3 is the least preferred.</p>
 <p>Taking the diffnce between the beta of the most preferred and the least preferred ygurt we can estimate the price difference consumers are willing to pay for their preferred brand. As long as the most preferred yogurt was 12.75 cents/oz more expensive than the least preferred yogurt, consumers are willing to make that extra spend to go after thier preferred brand.</p>
-<div id="559becd9" class="cell" data-execution_count="12">
+<div id="81f60e4e" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-stdout">
 <pre><code>Intercepts for Yogurt 1, 2, and 3: [ 0.09970444  0.10002663 -0.0056015 ]
 Most preferred yogurt is: 2
 Least preferred yogurt is: 3</code></pre>
 </div>
 </div>
-<div id="3405f4bf" class="cell" data-execution_count="13">
+<div id="b7a98d5f" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-stdout">
 <pre><code>Dollar benefit between the most and least preferred yogurt: -0.0008747252446890821</code></pre>
 </div>
@@ -368,7 +368,7 @@ Least preferred yogurt is: 3</code></pre>
 <p>Price Insensitivity: Despite increasing the price of Yogurt 1 by $0.10, the market share for Yogurt 1 did not decrease. This implies that, within the context of the data and model, consumers are not sensitive to this price change.</p>
 <p>Further Investigation Needed: The results are surprising and may indicate an underlying issue with the data or model. It is important to verify the dataset to ensure it accurately represents a diverse set of consumer preferences and to reassess the MNL model implementation to confirm it is correctly specified.</p>
 <p>Conclusion Our initial and revised analyses using the Multinomial Logit model both yielded unexpected results, with 100% of market share attributed to Yogurt 1 regardless of a price increase. This highlights the importance of data and model validation in ensuring accurate and meaningful insights. By addressing these potential issues, we can better understand consumer preferences and market dynamics, ultimately guiding more effective pricing and promotional strategies.</p>
-<div id="d2374d74" class="cell" data-execution_count="14">
+<div id="20e1bb3d" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_market_shares(beta, features):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    utilities <span class="op">=</span> np.dot(features, beta)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    exp_utilities <span class="op">=</span> np.exp(utilities)</span>
@@ -399,7 +399,7 @@ New market shares after price increase to yogurt 1: [1.]
 Do the yogurt 1 market shares decrease? No</code></pre>
 </div>
 </div>
-<div id="b216bc6e" class="cell" data-execution_count="15">
+<div id="1e8b623c" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of beta:"</span>, beta.shape)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of yogurt_features:"</span>, yogurt_features.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -414,7 +414,7 @@ Shape of yogurt_features: (9720, 5)</code></pre>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
 <p>Basic Information about the data: The survey contains 9000 rows, with 9 columns. Price ranges from 30,000 to 40,000 with a mean of 35,003.89. Seats are in the configuration of 6,7 and 8 with a mean of 7. About 33.33% of the alternatives have been chosen, indicating that the data includes one choice per three alternatives. Uniqueness in Data: - Number of respondents: 200 - Number of choice tasks: 15 by each respondent - Number of alternatives: 3 alternatives per task</p>
-<div id="665dc4a3" class="cell" data-execution_count="17">
+<div id="7045c429" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -502,7 +502,7 @@ Shape of yogurt_features: (9720, 5)</code></pre>
 </div>
 </div>
 </div>
-<div id="42367b3f" class="cell" data-execution_count="21">
+<div id="f9d17b69" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>(9000, 9)</code></pre>
@@ -512,7 +512,7 @@ Shape of yogurt_features: (9720, 5)</code></pre>
 </section>
 <section id="model" class="level3">
 <h3 class="anchored" data-anchor-id="model">Model</h3>
-<div id="902e650b" class="cell" data-execution_count="22">
+<div id="64877bf3" class="cell" data-execution_count="22">
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimization terminated successfully.
          Current function value: 0.558663
@@ -542,13 +542,13 @@ Shape of yogurt_features: (9720, 5)</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 28 May 2024</td>
+<td>Fri, 31 May 2024</td>
 <td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
 <td>0.1223</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:41:48</td>
+<td>18:30:53</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-5028.0</td>
 </tr>
@@ -716,7 +716,7 @@ Shape of yogurt_features: (9720, 5)</code></pre>
 </tr>
 </tbody>
 </table>
-<div id="3663ac3f" class="cell" data-execution_count="24">
+<div id="1786ee0e" class="cell" data-execution_count="24">
 <div class="cell-output cell-output-stdout">
 <pre><code>   probability
 0     0.116071

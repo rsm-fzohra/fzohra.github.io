@@ -220,6 +220,7 @@ plt.grid(True)
 plt.show()
 
 ```
+
 1- Peak Log-Likelihood- The log-likelihood reaches its peak around 𝜆 = 4 which suggests that this value is the best fit to the observed patent data per the Poisson model 
 
 2- Decrease in Log-Likelihood- As 𝜆 increases beyond 4, there is a sharp decline in the log-likelihood indicating  that the higher values deviate from the best fit. 

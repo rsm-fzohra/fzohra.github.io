@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Fatma Zohra">
-<meta name="dcterms.date" content="2024-05-28">
+<meta name="dcterms.date" content="2024-06-05">
 
 <title>A Replication of Karlan and List (2007)</title>
 <style>
@@ -101,7 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 28, 2024</p>
+      <p class="date">June 5, 2024</p>
     </div>
   </div>
   
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <section id="description" class="level3">
 <h3 class="anchored" data-anchor-id="description">Description</h3>
-<div id="1d205062" class="cell" data-execution_count="1">
+<div id="c8e36245" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_stata(<span class="st">'karlan_list_2007.dta'</span>)</span>
@@ -593,7 +593,7 @@ Variable Definitions
 </div>
 </div>
 </div>
-<div id="60be4667" class="cell" data-execution_count="2">
+<div id="59f14033" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>treatment                0
@@ -650,14 +650,14 @@ pop_propurban         1866
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="d6fcfa9a" class="cell" data-execution_count="3">
+<div id="d44176e3" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data<span class="op">=</span> data.dropna()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>(46513, 51)</code></pre>
 </div>
 </div>
-<div id="c289e523" class="cell" data-execution_count="4">
+<div id="a6095b92" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
@@ -821,7 +821,7 @@ dtype: int64</code></pre>
 </section>
 <section id="balance-test" class="level3">
 <h3 class="anchored" data-anchor-id="balance-test">Balance Test</h3>
-<div id="857c9653" class="cell" data-execution_count="5">
+<div id="6e3171f7" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'statecnt'</span>].mean()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>m2<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">0</span>][<span class="st">'statecnt'</span>].mean()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'statecnt'</span>].count()</span>
@@ -836,7 +836,7 @@ dtype: int64</code></pre>
 <pre><code>TtestResult(statistic=0.14112920381433885, pvalue=0.8877687862603023, df=31135.121177484336)</code></pre>
 </div>
 </div>
-<div id="b7303200" class="cell" data-execution_count="6">
+<div id="dc847bbe" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'difference in means: </span><span class="sc">{</span>m1<span class="op">-</span>m2<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f't-statistic: </span><span class="sc">{</span>t<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'p-value: </span><span class="sc">{</span><span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>stats.t.cdf(np.<span class="bu">abs</span>(t),n1<span class="op">+</span>n2))<span class="sc">:.3f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -846,7 +846,7 @@ t-statistic: 0.141
 p-value: 0.888</code></pre>
 </div>
 </div>
-<div id="a681e444" class="cell" data-execution_count="7">
+<div id="e5e398e4" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> smf</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> smf.add_constant(data[<span class="st">'treatment'</span>])</span>
@@ -862,8 +862,8 @@ p-value: 0.888</code></pre>
 Dep. Variable:               statecnt   R-squared:                       0.000
 Model:                            OLS   Adj. R-squared:                 -0.000
 Method:                 Least Squares   F-statistic:                   0.01943
-Date:                Tue, 28 May 2024   Prob (F-statistic):              0.889
-Time:                        22:58:39   Log-Likelihood:            -1.4713e+05
+Date:                Wed, 05 Jun 2024   Prob (F-statistic):              0.889
+Time:                        07:44:51   Log-Likelihood:            -1.4713e+05
 No. Observations:               46513   AIC:                         2.943e+05
 Df Residuals:                   46511   BIC:                         2.943e+05
 Df Model:                           1                                         
@@ -884,13 +884,13 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
 </div>
 </div>
-<div id="d846ea25" class="cell" data-execution_count="8">
+<div id="47602ef9" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># resids = np.array(y-model.predict(x))</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># model2= LinearRegression()</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># model2.fit(resids.reshape(-1,1),x.flatten())</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># model2.coef_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="853b4b02" class="cell" data-execution_count="9">
+<div id="52aaaa39" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'mrm2'</span>].mean()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>m2<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">0</span>][<span class="st">'mrm2'</span>].mean()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'mrm2'</span>].count()</span>
@@ -905,7 +905,7 @@ Notes:
 <pre><code>TtestResult(statistic=0.062190468381332714, pvalue=0.9504115537887046, df=31005.961866390502)</code></pre>
 </div>
 </div>
-<div id="1914c1c2" class="cell" data-execution_count="10">
+<div id="103fc546" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'difference in means: </span><span class="sc">{</span>m1<span class="op">-</span>m2<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f't-statistic: </span><span class="sc">{</span>t<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'p-value: </span><span class="sc">{</span><span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>stats.t.cdf(np.<span class="bu">abs</span>(t),n1<span class="op">+</span>n2))<span class="sc">:.3f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -915,7 +915,7 @@ t-statistic: 0.062
 p-value: 0.950</code></pre>
 </div>
 </div>
-<div id="4a8649a2" class="cell" data-execution_count="11">
+<div id="2c1bb461" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span> np.array(data[<span class="st">'treatment'</span>]).reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span> data[<span class="st">'mrm2'</span>]</span>
@@ -926,7 +926,7 @@ p-value: 0.950</code></pre>
 <pre><code>regression coefficient: 0.007</code></pre>
 </div>
 </div>
-<div id="359ff8eb" class="cell" data-execution_count="12">
+<div id="37c8fdbf" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>resids <span class="op">=</span> np.array(y<span class="op">-</span>model.predict(x))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>model2<span class="op">=</span> LinearRegression()</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>model2.fit(resids.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>),x.flatten())</span>
@@ -943,7 +943,7 @@ p-value: 0.950</code></pre>
 <section id="charitable-contribution-made" class="level3">
 <h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
 <p>First, I analyze whether matched donations lead to an increased response rate of making a donation.</p>
-<div id="d8d6dcac" class="cell" data-execution_count="13">
+<div id="e2215e64" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(data <span class="op">=</span> data, x<span class="op">=</span> <span class="st">'treatment'</span>, y <span class="op">=</span> <span class="st">'gave'</span>, estimator<span class="op">=</span> <span class="st">'mean'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -954,7 +954,7 @@ p-value: 0.950</code></pre>
 </div>
 </div>
 </div>
-<div id="de12beb3" class="cell" data-execution_count="14">
+<div id="d9fad2d2" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>p2<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">0</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].count()</span>
@@ -967,7 +967,7 @@ p-value: 0.950</code></pre>
 <pre><code>TtestResult(statistic=3.5915139686322664, pvalue=0.00032921982139318785, df=34449.91883046205)</code></pre>
 </div>
 </div>
-<div id="75e8c240" class="cell" data-execution_count="15">
+<div id="1ad00385" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'difference in proportions: </span><span class="sc">{</span>p1<span class="op">-</span>p2<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f't-statistic: </span><span class="sc">{</span>t<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'p-value: </span><span class="sc">{</span><span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>stats.t.cdf(np.<span class="bu">abs</span>(t),n1<span class="op">+</span>n2))<span class="sc">:.3f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -977,7 +977,7 @@ t-statistic: 3.592
 p-value: 0.000</code></pre>
 </div>
 </div>
-<div id="1f5baef3" class="cell" data-execution_count="16">
+<div id="08741d80" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> smf</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> smf.add_constant(data[<span class="st">'treatment'</span>])</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>model3 <span class="op">=</span> smf.Probit(data[<span class="st">'gave'</span>], x)</span>
@@ -1012,13 +1012,13 @@ p-value: 0.000</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 28 May 2024</td>
+<td>Wed, 05 Jun 2024</td>
 <td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
 <td>0.001300</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:58:41</td>
+<td>07:44:52</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-4707.8</td>
 </tr>
@@ -1073,7 +1073,7 @@ p-value: 0.000</code></pre>
 <section id="differences-between-match-rates" class="level3">
 <h3 class="anchored" data-anchor-id="differences-between-match-rates">Differences between Match Rates</h3>
 <p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
-<div id="4656a8ae" class="cell" data-execution_count="17">
+<div id="4f7312d4" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p1<span class="op">=</span> data[data[<span class="st">'ratio'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>p2<span class="op">=</span> data[data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'ratio'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].count()</span>
@@ -1090,7 +1090,7 @@ t-statistic: -1.069
 p-value: 0.285</code></pre>
 </div>
 </div>
-<div id="16131bfd" class="cell" data-execution_count="18">
+<div id="8527fa05" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p1<span class="op">=</span> data[data[<span class="st">'ratio'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>p2<span class="op">=</span> data[data[<span class="st">'ratio3'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'ratio'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].count()</span>
@@ -1107,7 +1107,7 @@ t-statistic: -1.326
 p-value: 0.185</code></pre>
 </div>
 </div>
-<div id="5bd89453" class="cell" data-execution_count="19">
+<div id="7eccfad1" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>p1<span class="op">=</span> data[data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>p2<span class="op">=</span> data[data[<span class="st">'ratio3'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>n1<span class="op">=</span> data[data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].count()</span>
@@ -1125,7 +1125,7 @@ p-value: 0.799</code></pre>
 </div>
 </div>
 <p>The difference is very small and statistically insignificant</p>
-<div id="3c795614" class="cell" data-execution_count="20">
+<div id="522baac9" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data['ratio1']= data['ratio'].astype(float)-data['ratio2']-data['ratio3']</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">#data2= data[data['treatment']==1]</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'ratio1'</span>]<span class="op">=</span> np.where((data[<span class="st">'ratio'</span>]<span class="op">!=</span><span class="st">'Control'</span>) <span class="op">&amp;</span> (data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (data[<span class="st">'ratio3'</span>]<span class="op">==</span><span class="dv">0</span>),<span class="dv">1</span>,<span class="dv">0</span>)</span>
@@ -1158,13 +1158,13 @@ p-value: 0.799</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 28 May 2024</td>
+<td>Wed, 05 Jun 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.00289</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:58:41</td>
+<td>07:44:53</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>24505.</td>
 </tr>
@@ -1276,7 +1276,7 @@ p-value: 0.799</code></pre>
 </div>
 <p>Compared to the treaemt and the control</p>
 <p><em>todo: Calculate the response rate difference between the 1:1 and 2:1 match ratios and the 2:1 and 3:1 ratios. Do this directly from the data, and do it by computing the differences in the fitted coefficients of the previous regression. what do you conclude regarding the effectiveness of different sizes of matched donations?</em></p>
-<div id="28f2d5ec" class="cell" data-execution_count="21">
+<div id="b7102ddb" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data[data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()<span class="op">-</span>data[data[<span class="st">'ratio1'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean())</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data[data[<span class="st">'ratio3'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean()<span class="op">-</span>data[data[<span class="st">'ratio2'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'gave'</span>].mean())</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.params[<span class="st">'ratio2'</span>]<span class="op">-</span>results.params[<span class="st">'ratio1'</span>])</span>
@@ -1293,7 +1293,7 @@ p-value: 0.799</code></pre>
 <h3 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h3>
 <p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
 <p><em>todo: Calculate a t-test or run a bivariate linear regression of the donation amount on the treatment status. What do we learn from doing this analysis?</em></p>
-<div id="f2678048" class="cell" data-execution_count="22">
+<div id="9c54af66" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span>smf.add_constant(data[<span class="st">'treatment'</span>])</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span> data[<span class="st">'amount'</span>]</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.OLS(y,X)</span>
@@ -1323,13 +1323,13 @@ p-value: 0.799</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 28 May 2024</td>
+<td>Wed, 05 Jun 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.0343</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:58:41</td>
+<td>07:44:53</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-1.6706e+05</td>
 </tr>
@@ -1423,7 +1423,7 @@ p-value: 0.799</code></pre>
 </div>
 <p>we learn treatmetn increasess doantion aount</p>
 <p><em>todo: now limit the data to just people who made a donation and repeat the previous analysis. This regression allows you to analyze how much respondents donate conditional on donating some positive amount. Interpret the regression coefficients – what did we learn? Does the treatment coefficient have a causal interpretation?</em></p>
-<div id="74ad4c6f" class="cell" data-execution_count="23">
+<div id="fa163d0c" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>data3 <span class="op">=</span> data[data[<span class="st">'gave'</span>]<span class="op">==</span><span class="dv">1</span>]</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span>smf.add_constant(data3[<span class="st">'treatment'</span>])</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span> data3[<span class="st">'amount'</span>]</span>
@@ -1454,13 +1454,13 @@ p-value: 0.799</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 28 May 2024</td>
+<td>Wed, 05 Jun 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.566</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:58:41</td>
+<td>07:44:53</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-5002.1</td>
 </tr>
@@ -1554,7 +1554,7 @@ p-value: 0.799</code></pre>
 </div>
 <p>Increasse the prob but if you were to give, the amoutn would be lower</p>
 <p><em>todo: Make two plot: one for the treatment group and one for the control. Each plot should be a histogram of the donation amounts only among people who donated. Add a red vertical bar or some other annotation to indicate the sample average for each plot.</em></p>
-<div id="0dc6e9e7" class="cell" data-execution_count="24">
+<div id="eea243a7" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>treat <span class="op">=</span> data3[data3[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">1</span>]</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>control <span class="op">=</span> data3[data3[<span class="st">'treatment'</span>]<span class="op">==</span><span class="dv">0</span>]</span>
@@ -1568,7 +1568,7 @@ p-value: 0.799</code></pre>
 </div>
 </div>
 </div>
-<div id="df0a1c10" class="cell" data-execution_count="25">
+<div id="3b7f680f" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sns.histplot(control, x <span class="op">=</span> <span class="st">'amount'</span>)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>plt.axvline(x <span class="op">=</span> control[<span class="st">'amount'</span>].mean(), color <span class="op">=</span> <span class="st">'r'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1589,7 +1589,7 @@ p-value: 0.799</code></pre>
 <section id="law-of-large-numbers" class="level3">
 <h3 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h3>
 <p><em>to do: Make a plot like those on slide 43 from our first class and explain the plot to the reader. To do this, you will simulate 100,00 draws from the control distribution and 10,000 draws from the treatment distribution. You’ll then calculate a vector of 10,000 differences, and then you’ll plot the cumulative average of that vector of differences. Comment on whether the cumulative average approaches the true difference in means.</em></p>
-<div id="d9dcaaf1" class="cell" data-execution_count="26">
+<div id="acc181e5" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>control <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.018</span>, size <span class="op">=</span> <span class="dv">10000</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>treat <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.022</span>, size <span class="op">=</span> <span class="dv">10000</span>)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> treat <span class="op">-</span> control </span>
@@ -1599,7 +1599,7 @@ p-value: 0.799</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="HW1_files/figure-html/cell-27-output-1.png" width="590" height="411" class="figure-img"></p>
+<p><img src="HW1_files/figure-html/cell-27-output-1.png" width="588" height="416" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1608,7 +1608,7 @@ p-value: 0.799</code></pre>
 <section id="central-limit-theorem" class="level3">
 <h3 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h3>
 <p><em>to do: Make 4 histograms like those on slide 44 from our first class at sample sizes 50, 200, 500, and 1000 and explain these plots to the reader. To do this for a sample size of e.g.&nbsp;50, take 50 draws from each of the control and treatment distributions, and calculate the average difference between those draws. Then repeat that process 999 more times so that you have 1000 averages. Plot the histogram of those averages. Comment on whether zero is in the “middle” of the distribution or whether it’s in the “tail.”</em></p>
-<div id="802155e9" class="cell" data-execution_count="27">
+<div id="96c97d79" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>avg50 <span class="op">=</span> []</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    control <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.018</span>, size <span class="op">=</span> <span class="dv">50</span>)</span>
@@ -1621,7 +1621,7 @@ p-value: 0.799</code></pre>
 <span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>plt.axhline(y <span class="op">=</span> <span class="fl">0.004</span>, linestyle <span class="op">=</span> <span class="st">'--'</span> )</span>
 <span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>plt.hist(x <span class="op">=</span> avg50, orientation <span class="op">=</span> <span class="st">'horizontal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
-<pre><code>(array([  1.,   6.,  20.,  70., 195., 312., 356.,   0.,  32.,   8.]),
+<pre><code>(array([  1.,   4.,  17.,  85., 189., 330., 331.,   0.,  30.,  13.]),
  array([-0.1 , -0.08, -0.06, -0.04, -0.02,  0.  ,  0.02,  0.04,  0.06,
          0.08,  0.1 ]),
  &lt;BarContainer object of 10 artists&gt;)</code></pre>
@@ -1634,7 +1634,7 @@ p-value: 0.799</code></pre>
 </div>
 </div>
 </div>
-<div id="3f91404c" class="cell" data-execution_count="28">
+<div id="decb04cf" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>avg200 <span class="op">=</span> []</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    control <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.018</span>, size <span class="op">=</span> <span class="dv">200</span>)</span>
@@ -1647,20 +1647,20 @@ p-value: 0.799</code></pre>
 <span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>plt.axhline(y <span class="op">=</span> <span class="fl">0.004</span>, linestyle <span class="op">=</span> <span class="st">'--'</span> )</span>
 <span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>plt.hist(x <span class="op">=</span> avg200, orientation <span class="op">=</span> <span class="st">'horizontal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
-<pre><code>(array([  4.,   8.,  45., 149., 277., 260., 174.,  66.,  16.,   1.]),
- array([-0.05  , -0.0395, -0.029 , -0.0185, -0.008 ,  0.0025,  0.013 ,
-         0.0235,  0.034 ,  0.0445,  0.055 ]),
+<pre><code>(array([  1.,   2.,  20., 108., 200., 302., 206., 111.,  39.,  11.]),
+ array([-0.05  , -0.0405, -0.031 , -0.0215, -0.012 , -0.0025,  0.007 ,
+         0.0165,  0.026 ,  0.0355,  0.045 ]),
  &lt;BarContainer object of 10 artists&gt;)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="HW1_files/figure-html/cell-29-output-2.png" width="590" height="415" class="figure-img"></p>
+<p><img src="HW1_files/figure-html/cell-29-output-2.png" width="590" height="411" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div id="96b030b4" class="cell" data-execution_count="29">
+<div id="d29a2469" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>avg500 <span class="op">=</span> []</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    control <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.018</span>, size <span class="op">=</span> <span class="dv">500</span>)</span>
@@ -1673,9 +1673,9 @@ p-value: 0.799</code></pre>
 <span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>plt.axhline(y <span class="op">=</span> <span class="fl">0.004</span>, linestyle <span class="op">=</span> <span class="st">'--'</span> )</span>
 <span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>plt.hist(x <span class="op">=</span> avg500, orientation <span class="op">=</span> <span class="st">'horizontal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
-<pre><code>(array([  4.,  19.,  82., 175., 178., 260., 187.,  71.,  21.,   3.]),
- array([-0.024 , -0.0184, -0.0128, -0.0072, -0.0016,  0.004 ,  0.0096,
-         0.0152,  0.0208,  0.0264,  0.032 ]),
+<pre><code>(array([ 14.,  23.,  71.,  86., 252., 185., 155., 145.,  38.,  31.]),
+ array([-0.022 , -0.0172, -0.0124, -0.0076, -0.0028,  0.002 ,  0.0068,
+         0.0116,  0.0164,  0.0212,  0.026 ]),
  &lt;BarContainer object of 10 artists&gt;)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1686,7 +1686,7 @@ p-value: 0.799</code></pre>
 </div>
 </div>
 </div>
-<div id="782baa63" class="cell" data-execution_count="30">
+<div id="da447e11" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>avg1000 <span class="op">=</span> []</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    control <span class="op">=</span> stats.bernoulli.rvs(<span class="fl">0.018</span>, size <span class="op">=</span> <span class="dv">1000</span>)</span>
@@ -1699,9 +1699,9 @@ p-value: 0.799</code></pre>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>plt.axhline(y <span class="op">=</span> <span class="fl">0.004</span>, linestyle <span class="op">=</span> <span class="st">'--'</span> )</span>
 <span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>plt.hist(x <span class="op">=</span> avg1000, orientation <span class="op">=</span> <span class="st">'horizontal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
-<pre><code>(array([  1.,   4.,  33.,  88., 237., 215., 283., 105.,  31.,   3.]),
- array([-0.021 , -0.0165, -0.012 , -0.0075, -0.003 ,  0.0015,  0.006 ,
-         0.0105,  0.015 ,  0.0195,  0.024 ]),
+<pre><code>(array([  2.,   4.,  61., 114., 281., 247., 194.,  64.,  25.,   8.]),
+ array([-0.019 , -0.0145, -0.01  , -0.0055, -0.001 ,  0.0035,  0.008 ,
+         0.0125,  0.017 ,  0.0215,  0.026 ]),
  &lt;BarContainer object of 10 artists&gt;)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
